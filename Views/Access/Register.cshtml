@@ -1,0 +1,78 @@
+﻿@{
+    Layout = null;
+}
+@using NurseCourse.Models.CustomModels
+
+@model UserDTO
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../Css/style.css">
+
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+    <div class="container my-5">
+
+        <div class="row justify-content-center">
+            <h1 style="color: burlywood; font-family: Oswald; font-size:80px;">R E G I S T R O</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card-body">
+                    <form asp-action="Register" asp-controller="Access">
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;" for="firstName">N o m b r e s:</label>
+                            <input asp-for="firstName" type="text" class="form-control" required placeholder="Ingrese sus nombres">
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">A p e l l i d o   P a t e r n o:</label>
+                            <input asp-for="lastName" type="text" class="form-control" required placeholder="Ingrese su primer apellido">
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">A p e l l i d o   M a t e r n o:</label>
+                            <input asp-for="secondLastName" type="text" class="form-control" required placeholder="Ingrese su segundo apellido">
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">C o r r e o   E l e c t r ó n i c o:</label>
+                            <input asp-for="email" type="text" class="form-control" required placeholder="Ingrese su correo electronico">
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">N ú m e r o   d e   C e l u l a r:</label>
+                            <input asp-for="phoneNumber" type="text" class="form-control" required placeholder="Ingrese su numero de celular">
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">C o d i g o   d e   M i n i s t e r i o:</label>
+                            <input asp-for="ministryCode" type="text" class="form-control" required placeholder="Ingrese su codigo del ministerio">
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">Su nombre de usuario sera enviado a su correo</label>
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">C o n t r a s e ñ a:</label>
+                            <input asp-for="password" type="password" class="form-control" required placeholder="Ingrese su contraseña">
+                        </div>
+                        <div class="form-group">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;">V e r i f i c a r   C o n t r a s e ñ a:</label>
+                            <input asp-for="confirmPassword" type="password" class="form-control" required placeholder="Repita su contraseña">
+                        </div>
+                        <input style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan;" type="submit" value="Registrarse" class="btn btn-primary btn-block" />
+                    </form>
+                    <div class="mt-3 d-flex justify-content-between">
+                        <a class="btn" style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan;" asp-action="Login" asp-controller="Access">Iniciar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
