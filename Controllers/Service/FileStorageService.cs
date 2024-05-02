@@ -14,7 +14,6 @@ public class FileStorageService
 
     public FileStorageService(IConfiguration configuration)
     {
-        // Trata de analizar la configuración de SSL y usa un valor predeterminado si no está presente.
         _useSSL = configuration.GetValue<bool>("MinioConfig:UseSSL", false);
         _endpoint = configuration["MinioConfig:Endpoint"];
 

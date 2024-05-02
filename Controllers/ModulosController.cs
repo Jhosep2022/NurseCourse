@@ -114,4 +114,28 @@ public class ModulosController : ControllerBase
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
+    // GET: api/Modulos/Curso/5
+    [HttpGet("Curso/{cursoId}")]
+    public async Task<ActionResult<IEnumerable<ModuloDto>>> GetModulosByCursoId(int cursoId)
+    {
+        var modulos = await _context.Modulos
+            .Where(m => m.CursoId == cursoId)
+            .Select(m => new ModuloDto
+            {
+                ModuloId = m.ModuloId,
+                Nombre = m.Nombre,
+                Orden = m.Orden,
+                CursoId = m.CursoId
+            })
+            .ToListAsync();
+
+        if (!modulos.Any())
+        {
+            return NotFound();
+        }
+
+        return modulos;
+    }
+
 }

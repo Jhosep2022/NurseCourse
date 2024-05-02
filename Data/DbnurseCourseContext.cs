@@ -14,20 +14,10 @@ public partial class DbnurseCourseContext : DbContext
     public virtual DbSet<Curso> Cursos { get; set; }
     public virtual DbSet<Examene> Examenes { get; set; }
     public virtual DbSet<Modulo> Modulos { get; set; }
-    public virtual DbSet<OpcionesDeRespuesta> OpcionesDeRespuestas { get; set; }
-    public virtual DbSet<Pregunta> Preguntas { get; set; }
     public virtual DbSet<Progreso> Progreso { get; set; }
-    public virtual DbSet<RespuestasUsuario> RespuestasUsuarios { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            throw new InvalidOperationException("La configuración de la base de datos no está configurada correctamente.");
-        }
-    }
+    public virtual DbSet<NotaExamen> NotasExamenes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,6 +49,9 @@ public partial class DbnurseCourseContext : DbContext
             entity.HasOne(d => d.Curso)
                   .WithMany(p => p.Examenes)
                   .HasForeignKey(d => d.CursoId);
+            entity.HasMany(d => d.NotasExamenes)
+                  .WithOne(n => n.Examen)
+                  .HasForeignKey(n => n.ExamenId);
         });
 
         modelBuilder.Entity<Modulo>(entity =>
@@ -67,22 +60,6 @@ public partial class DbnurseCourseContext : DbContext
             entity.HasOne(d => d.Curso)
                   .WithMany(p => p.Modulos)
                   .HasForeignKey(d => d.CursoId);
-        });
-
-        modelBuilder.Entity<OpcionesDeRespuesta>(entity =>
-        {
-            entity.HasKey(e => e.OpcionId);
-            entity.HasOne(d => d.Pregunta)
-                  .WithMany(p => p.OpcionesDeRespuesta)
-                  .HasForeignKey(d => d.PreguntaId);
-        });
-
-        modelBuilder.Entity<Pregunta>(entity =>
-        {
-            entity.HasKey(e => e.PreguntaId);
-            entity.HasOne(d => d.Examen)
-                  .WithMany(p => p.Pregunta)
-                  .HasForeignKey(d => d.ExamenId);
         });
 
         modelBuilder.Entity<Progreso>(entity =>
@@ -96,22 +73,6 @@ public partial class DbnurseCourseContext : DbContext
                   .HasForeignKey(d => d.UsuarioId);
         });
 
-        modelBuilder.Entity<RespuestasUsuario>(entity =>
-        {
-            entity.ToTable("RespuestasUsuarios"); // Asegúrate de que esto coincida exactamente con el nombre en la base de datos
-            entity.HasKey(e => e.RespuestaUsuarioId);
-            entity.HasOne(d => d.Opcion)
-                .WithMany(p => p.RespuestasUsuarios)
-                .HasForeignKey(d => d.OpcionId);
-            entity.HasOne(d => d.Pregunta)
-                .WithMany(p => p.RespuestasUsuarios)
-                .HasForeignKey(d => d.PreguntaId);
-            entity.HasOne(d => d.Usuario)
-                .WithMany(p => p.RespuestasUsuarios)
-                .HasForeignKey(d => d.UsuarioId);
-        });
-
-
         modelBuilder.Entity<Role>(entity =>
         {
             entity.HasKey(e => e.RolId);
@@ -123,10 +84,20 @@ public partial class DbnurseCourseContext : DbContext
             entity.HasOne(d => d.Rol)
                   .WithMany(p => p.Usuarios)
                   .HasForeignKey(d => d.RolId);
+            entity.HasMany(d => d.NotasExamenes)
+                  .WithOne(n => n.Usuario)
+                  .HasForeignKey(n => n.UsuarioId);
         });
 
-        OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<NotaExamen>(entity =>
+        {
+            entity.HasKey(e => e.NotaExamenId);
+            entity.HasOne(d => d.Usuario)
+                  .WithMany(p => p.NotasExamenes)
+                  .HasForeignKey(d => d.UsuarioId);
+            entity.HasOne(d => d.Examen)
+                  .WithMany(p => p.NotasExamenes)
+                  .HasForeignKey(d => d.ExamenId);
+        });
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

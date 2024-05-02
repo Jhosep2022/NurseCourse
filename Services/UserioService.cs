@@ -18,7 +18,8 @@ namespace NurseCourse.Services
         {
             var usuario = await _context.Usuarios
                 .Include(u => u.Progresos)
-                .Include(u => u.RespuestasUsuarios)
+                .Include(u => u.Cargo)
+                .Include(u => u.Nombre)
                 .Include(u => u.Rol)
                 .FirstOrDefaultAsync(u => u.UsuarioId == id);
 
