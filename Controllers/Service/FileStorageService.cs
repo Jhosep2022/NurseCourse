@@ -29,7 +29,7 @@ public class FileStorageService
         }
 
         _bucketName = configuration["MinioConfig:BucketName"];
-        EnsureBucketExistsAsync().Wait();  // Considera manejar esto de manera asincrónica si es posible
+        EnsureBucketExistsAsync().Wait();  
     }
 
     private async Task EnsureBucketExistsAsync()
@@ -67,5 +67,18 @@ public class FileStorageService
     {
         string protocol = _useSSL ? "https" : "http";
         return $"{protocol}://{_endpoint}/{_bucketName}/{fileName}";
+    }
+
+    public async Task<string> GetPresignedUrlAsync(string objectName, int expiresIntSeconds = 900)
+    {
+        try
+        {
+            return await _minioClient.PresignedGetObjectAsync(_bucketName, objectName, expiresIntSeconds);
+        }
+        catch (MinioException ex)
+        {
+            Console.WriteLine($"Error generating presigned URL: {ex.Message}");
+            throw;
+        }
     }
 }

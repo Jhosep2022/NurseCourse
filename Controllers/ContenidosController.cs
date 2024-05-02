@@ -25,21 +25,14 @@ public class ContenidosController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ContenidoDto>> CreateContenido([FromForm] CreateContenidoDto createContenidoDto, IFormFile file)
     {
-        // Verifica si el ModuloId existe
-        var moduloExists = await _context.Modulos.AnyAsync(m => m.ModuloId == createContenidoDto.ModuloId);
-        if (!moduloExists)
-        {
-            return BadRequest($"No existe un módulo con el ID {createContenidoDto.ModuloId}");
-        }
-
         var stream = file.OpenReadStream();
-        var fileName = $"{System.Guid.NewGuid()}_{file.FileName}";
+        var fileName = $"{Guid.NewGuid()}_{file.FileName}";
         var url = await _fileStorageService.UploadFileAsync(stream, fileName);
 
         var contenido = new Contenido
         {
             Tipo = createContenidoDto.Tipo,
-            Url = url,
+            Url = url, // Esto será la URL ordinaria
             Texto = createContenidoDto.Texto,
             ModuloId = createContenidoDto.ModuloId
         };
@@ -47,15 +40,18 @@ public class ContenidosController : ControllerBase
         _context.Contenidos.Add(contenido);
         await _context.SaveChangesAsync();
 
+        var presignedUrl = await _fileStorageService.GetPresignedUrlAsync(fileName);
+
         return CreatedAtAction(nameof(GetContenido), new { id = contenido.ContenidoId }, new ContenidoDto
         {
             ContenidoId = contenido.ContenidoId,
             Tipo = contenido.Tipo,
             Texto = contenido.Texto,
             ModuloId = contenido.ModuloId,
-            Url = url
+            Url = presignedUrl 
         });
     }
+
 
     [HttpGet("ByModulo/{moduloId}")]
     public async Task<ActionResult<IEnumerable<ContenidoDto>>> GetAllContenidosByModuloId(int moduloId)
