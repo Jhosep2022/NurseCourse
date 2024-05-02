@@ -1,15 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using NurseCourse.Models;
-using NurseCourse.Models.CustomModels;
+﻿using NurseCourse.Models;
+using NurseCourse.Models.DTOs;
+using System.Threading.Tasks;
 
 
 namespace NurseCourse.Repositories
 {
-    public interface IAccess
-    {
-        Task<bool> CreatePerson(Person person, User user, string confirmPassword);
-        Task<User> Login(LoginDTO login);
-        Task<int> RecoveryPassword(string email);
-        Task<bool> ChangePassword(string newPassword, string confirmPassword, string code, int id);
+    public interface IAccess{
+        Task<Usuario> Register(RegistroUsuarioDto registroDto);
+        Task<Usuario> Login(LoginDTO loginDto);
+        Task<Usuario> GetUsuario(int id);   
+
     }
 }

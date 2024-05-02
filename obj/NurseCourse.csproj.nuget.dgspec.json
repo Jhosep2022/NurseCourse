@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\VICTOR123\\Downloads\\NurseCourse\\NurseCourse\\NurseCourse.csproj": {}
+    "D:\\UpWork\\univalle\\NurseCourse\\NurseCourse\\NurseCourse.csproj": {}
   },
   "projects": {
-    "C:\\Users\\VICTOR123\\Downloads\\NurseCourse\\NurseCourse\\NurseCourse.csproj": {
+    "D:\\UpWork\\univalle\\NurseCourse\\NurseCourse\\NurseCourse.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\VICTOR123\\Downloads\\NurseCourse\\NurseCourse\\NurseCourse.csproj",
+        "projectUniqueName": "D:\\UpWork\\univalle\\NurseCourse\\NurseCourse\\NurseCourse.csproj",
         "projectName": "NurseCourse",
-        "projectPath": "C:\\Users\\VICTOR123\\Downloads\\NurseCourse\\NurseCourse\\NurseCourse.csproj",
-        "packagesPath": "C:\\Users\\VICTOR123\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\VICTOR123\\Downloads\\NurseCourse\\NurseCourse\\obj\\",
+        "projectPath": "D:\\UpWork\\univalle\\NurseCourse\\NurseCourse\\NurseCourse.csproj",
+        "packagesPath": "C:\\Users\\JOSE\\.nuget\\packages\\",
+        "outputPath": "D:\\UpWork\\univalle\\NurseCourse\\NurseCourse\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\VICTOR123\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\JOSE\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,7 +43,21 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            },
             "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.4, )"
             },
@@ -60,6 +72,14 @@
               "version": "[8.0.4, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Minio": {
+              "target": "Package",
+              "version": "[3.1.13, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
               "version": "[8.0.2, )"
             }

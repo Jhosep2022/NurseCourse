@@ -1,8 +1,10 @@
 ﻿@{
     Layout = null;
 }
-@using NurseCourse.Models.CustomModels
-@model LoginDTO
+@using NurseCourse.Models.DTOs
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -28,7 +30,7 @@
             <h3 style="color: burlywood; font-family: Oswald; font-size:200%;">Inicio de sesión en tu cuenta</h3>
         </div>
         <div class="row justify-content-center">
-            <label style="color: bisque; font-family: Oswald; font-size:150%;">Tienes una cuenta? Inicia sesion aqui</label>
+            <label style="color: bisque; font-family: Oswald; font-size:150%;">¿Tienes una cuenta? Inicia sesión aquí</label>
         </div>
         
         <div class="row justify-content-center; container;">
@@ -37,14 +39,14 @@
             </div>
             <div class="col-md-6; right">
                 <div class="card-body">
-                    <form asp-action="Login" asp-controller="Access">
+                    <form asp-action="Login" asp-controller="Access" method="post">
                         <div class="form-group">
-                            <label style="color: bisque; font-family: Oswald; font-size:22px;" for="username">U s u a r i o:</label>
-                            <input type="text" id="username" asp-for="userName" class="form-control" required placeholder="Ingrese su nombre de usuario">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;" for="CorreoElectronico">Correo Electrónico:</label>
+                            <input type="email" id="CorreoElectronico" name="CorreoElectronico" class="form-control" required placeholder="Ingrese su correo electrónico">
                         </div>
                         <div class="form-group">
-                            <label style="color: bisque; font-family: Oswald; font-size:22px;" for="password">C o n t r a s e ñ a:</label>
-                            <input type="password" id="password" asp-for="password" class="form-control" required placeholder="Ingrese su contraseña">
+                            <label style="color: bisque; font-family: Oswald; font-size:22px;" for="Contraseña">Contraseña:</label>
+                            <input type="password" id="Contraseña" name="Contraseña" class="form-control" required placeholder="Ingrese su contraseña">
                         </div>
                         <input style="color: #4F3803; font-family: Oswald; font-size:20px; background-color:tan; border-color:tan" type="submit" class="btn btn-primary btn-block" value="Iniciar sesión" />
                     </form>
