@@ -23,27 +23,41 @@ public class ContenidosController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ContenidoDto>> CreateContenido([FromForm] ContenidoDto contenidoDto, IFormFile file)
+    public async Task<ActionResult<ContenidoDto>> CreateContenido([FromForm] CreateContenidoDto createContenidoDto, IFormFile file)
     {
+        // Verifica si el ModuloId existe
+        var moduloExists = await _context.Modulos.AnyAsync(m => m.ModuloId == createContenidoDto.ModuloId);
+        if (!moduloExists)
+        {
+            return BadRequest($"No existe un módulo con el ID {createContenidoDto.ModuloId}");
+        }
+
         var stream = file.OpenReadStream();
-        var fileName = $"{System.Guid.NewGuid()}_{file.FileName}"; 
+        var fileName = $"{System.Guid.NewGuid()}_{file.FileName}";
         var url = await _fileStorageService.UploadFileAsync(stream, fileName);
 
         var contenido = new Contenido
         {
-            Tipo = contenidoDto.Tipo,
-            Url = url, 
-            Texto = contenidoDto.Texto,
-            ModuloId = contenidoDto.ModuloId
+            Tipo = createContenidoDto.Tipo,
+            Url = url,
+            Texto = createContenidoDto.Texto,
+            ModuloId = createContenidoDto.ModuloId
         };
 
         _context.Contenidos.Add(contenido);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetContenido), new { id = contenido.ContenidoId }, contenidoDto);
+        return CreatedAtAction(nameof(GetContenido), new { id = contenido.ContenidoId }, new ContenidoDto
+        {
+            ContenidoId = contenido.ContenidoId,
+            Tipo = contenido.Tipo,
+            Texto = contenido.Texto,
+            ModuloId = contenido.ModuloId,
+            Url = url
+        });
     }
 
-    [HttpGet("{moduloId}")]
+    [HttpGet("ByModulo/{moduloId}")]
     public async Task<ActionResult<IEnumerable<ContenidoDto>>> GetAllContenidosByModuloId(int moduloId)
     {
         var contenidos = await _context.Contenidos
@@ -61,9 +75,11 @@ public class ContenidosController : ControllerBase
         return Ok(contenidos);
     }
 
-    private async Task<ActionResult<ContenidoDto>> GetContenido(int id)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ContenidoDto>> GetContenido(int id)
     {
         var contenido = await _context.Contenidos
+            .Where(c => c.ContenidoId == id)
             .Select(c => new ContenidoDto
             {
                 ContenidoId = c.ContenidoId,
@@ -72,15 +88,16 @@ public class ContenidosController : ControllerBase
                 Texto = c.Texto,
                 ModuloId = c.ModuloId
             })
-            .FirstOrDefaultAsync(c => c.ContenidoId == id);
+            .FirstOrDefaultAsync();
 
         if (contenido == null)
         {
-            return NotFound();
+            return NotFound($"No se encontró contenido con ID {id}");
         }
 
-        return contenido;
+        return Ok(contenido);
     }
+
 
     // Add other CRUD operations as needed
 }
