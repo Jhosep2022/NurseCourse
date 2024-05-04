@@ -20,21 +20,21 @@ public class NotaExamenesController : ControllerBase
         _context = context;
     }
 
-    // GET: api/NotaExamenes
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<NotaExamenDto>>> GetAllNotaExamenes()
+    // POST: api/NotaExamenes
+    [HttpPost]
+    public async Task<ActionResult<NotaExamenDto>> CreateNotaExamen([FromBody] NotaExamenDto notaDto)
     {
-        var notas = await _context.NotasExamenes
-            .Select(n => new NotaExamenDto
-            {
-                NotaExamenId = n.NotaExamenId,
-                UsuarioId = n.UsuarioId,
-                ExamenId = n.ExamenId,
-                Calificacion = n.Calificacion
-            })
-            .ToListAsync();
+        var nota = new NotaExamen
+        {
+            UsuarioId = notaDto.UsuarioId,
+            ExamenId = notaDto.ExamenId,
+            Calificacion = notaDto.Calificacion
+        };
 
-        return Ok(notas);
+        _context.NotasExamenes.Add(nota);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetNotaExamen), new { id = nota.NotaExamenId }, notaDto);
     }
 
     // GET: api/NotaExamenes/5
@@ -59,60 +59,5 @@ public class NotaExamenesController : ControllerBase
 
         return nota;
     }
-
-    // POST: api/NotaExamenes
-    [HttpPost]
-    public async Task<ActionResult<NotaExamenDto>> CreateNotaExamen([FromBody] NotaExamenDto notaDto)
-    {
-        var nota = new NotaExamen
-        {
-            UsuarioId = notaDto.UsuarioId,
-            ExamenId = notaDto.ExamenId,
-            Calificacion = notaDto.Calificacion
-        };
-
-        _context.NotasExamenes.Add(nota);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetNotaExamen), new { id = nota.NotaExamenId }, notaDto);
-    }
-
-    // PUT: api/NotaExamenes/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateNotaExamen(int id, [FromBody] NotaExamenDto notaDto)
-    {
-        if (id != notaDto.NotaExamenId)
-        {
-            return BadRequest();
-        }
-
-        var nota = await _context.NotasExamenes.FindAsync(id);
-        if (nota == null)
-        {
-            return NotFound();
-        }
-
-        nota.UsuarioId = notaDto.UsuarioId;
-        nota.ExamenId = notaDto.ExamenId;
-        nota.Calificacion = notaDto.Calificacion;
-        _context.NotasExamenes.Update(nota);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    // DELETE: api/NotaExamenes/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteNotaExamen(int id)
-    {
-        var nota = await _context.NotasExamenes.FindAsync(id);
-        if (nota == null)
-        {
-            return NotFound();
-        }
-
-        _context.NotasExamenes.Remove(nota);
-        await _context.SaveChangesAsync();
-        return NoContent();
-    }
 }
+

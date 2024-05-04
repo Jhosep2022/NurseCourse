@@ -4,7 +4,7 @@ using NurseCourse.Models;
 using NurseCourse.Models.DTOs;
 using System.Threading.Tasks;
 using System.Linq;
-using Microsoft.EntityFrameworkCore; // Si usas métodos específicos de EF Core
+using Microsoft.EntityFrameworkCore;
 
 namespace NurseCourse.Controllers;
 
@@ -40,6 +40,22 @@ public class UsuariosController : ControllerBase
         _context.Usuarios.Add(usuario);
         await _context.SaveChangesAsync();
 
+        // Crear automáticamente el progreso inicial para el nuevo usuario
+        var contenidoInicial = await _context.Contenidos.FirstOrDefaultAsync(); // Obtener el contenido inicial
+        if (contenidoInicial != null)
+        {
+            var progreso = new Progreso
+            {
+                ModuloActual = 1, // O el módulo inicial correspondiente
+                Completo = false,
+                ContenidoId = contenidoInicial.ContenidoId,
+                UsuarioId = usuario.UsuarioId
+            };
+
+            _context.Progreso.Add(progreso);
+            await _context.SaveChangesAsync();
+        }
+
         return CreatedAtAction("GetUsuario", new { id = usuario.UsuarioId }, usuario);
     }
 
@@ -74,6 +90,4 @@ public class UsuariosController : ControllerBase
 
         return usuario;
     }
-
-
 }

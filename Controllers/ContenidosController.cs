@@ -22,6 +22,8 @@ public class ContenidosController : ControllerBase
         _fileStorageService = fileStorageService;
     }
 
+    // ContenidosController.cs
+
     [HttpPost]
     public async Task<ActionResult<ContenidoDto>> CreateContenido([FromForm] CreateContenidoDto createContenidoDto, IFormFile file)
     {
@@ -39,7 +41,23 @@ public class ContenidosController : ControllerBase
 
         _context.Contenidos.Add(contenido);
         await _context.SaveChangesAsync();
-        
+
+        // Crear automáticamente un progreso para cada usuario cuando se agrega un nuevo contenido
+        var usuarios = await _context.Usuarios.ToListAsync();
+        foreach (var usuario in usuarios)
+        {
+            var progreso = new Progreso
+            {
+                ModuloActual = 1, // O el módulo inicial correspondiente
+                Completo = false,
+                ContenidoId = contenido.ContenidoId,
+                UsuarioId = usuario.UsuarioId
+            };
+
+            _context.Progreso.Add(progreso);
+        }
+
+        await _context.SaveChangesAsync();
 
         var presignedUrl = await _fileStorageService.GetPresignedUrlAsync(fileName);
 

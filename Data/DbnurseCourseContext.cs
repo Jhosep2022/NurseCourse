@@ -56,7 +56,7 @@ public partial class DbnurseCourseContext : DbContext
 
         modelBuilder.Entity<Modulo>(entity =>
         {
-            entity.HasKey(e => e.ModuloId);
+            entity.HasKey(e => e.ModuloID);
             entity.HasOne(d => d.Curso)
                   .WithMany(p => p.Modulos)
                   .HasForeignKey(d => d.CursoId);

@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NurseCourse.Models;
-
-public partial class Modulo
+namespace NurseCourse.Models
 {
-    public int ModuloId { get; set; }
+    public partial class Modulo
+    {
+        public int ModuloID { get; set; }
 
-    public string Nombre { get; set; } = null!;
+        public string Nombre { get; set; } = null!;
 
-    public int Orden { get; set; }
+        public string Descripcion { get; set; } 
 
-    public int CursoId { get; set; }
+        public int CursoId { get; set; }
 
-    public virtual ICollection<Contenido> Contenidos { get; set; } = new List<Contenido>();
+        public virtual ICollection<Contenido> Contenidos { get; set; } = new List<Contenido>();
 
-    public virtual Curso Curso { get; set; } = null!;
+        public virtual Curso Curso { get; set; } = null!;
+    }
 }
