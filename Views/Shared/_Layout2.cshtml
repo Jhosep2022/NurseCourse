@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - NurseCourse</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/NurseCourse.styles.css" asp-append-version="true" />
+    <style>
+        
+        a.navbar-brand {
+        white-space: normal;
+        text-align: center;
+        word-break: break-all;
+        }
+
+        a {
+        color: #0077cc;
+        }
+        nav{
+        height: 100vh;
+        min-height: 100vh;
+        }
+
+        main {
+        max-height: 100vh;
+        margin: 0;
+        padding: 0;
+        }
+
+        .btn-primary {
+        color: #fff;
+        background-color: #1b6ec2;
+        border-color: #1861ac;
+        }
+
+        .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        color: #fff;
+        background-color: #1b6ec2;
+        border-color: #1861ac;
+        }
+
+        .border-top {
+        border-top: 1px solid #e5e5e5;
+        }
+        .border-bottom {
+        border-bottom: 1px solid #e5e5e5;
+        }
+
+        .box-shadow {
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+        }
+
+        button.accept-policy {
+        font-size: 1rem;
+        line-height: inherit;
+        }
+
+        .footer {
+        background-color: #fff;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        white-space: nowrap;
+        line-height: 60px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container-fluid" style="overflow-y: clip;">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block bg-dark text-white sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active text-white text-uppercase fs-3" asp-action="Student" asp-controller="Nurse">
+                            NurseCourse
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-action="Index" asp-controller="Student">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            Home Ver cursos
+                            </a>
+                        </li>                        
+                        </ul>
+                    </div>
+                </nav>
+
+                <main role="main" class="col-md-10 ml-sm-auto col-lg-10 pb-4" style="overflow-y: scroll;">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

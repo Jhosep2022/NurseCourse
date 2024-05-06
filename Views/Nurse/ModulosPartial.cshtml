@@ -1,0 +1,28 @@
+@model IEnumerable<NurseCourse.Models.Curso>
+
+<select id="cursosDropdown" class="form-control">
+    <option value="">Selecciona un curso</option>
+    @foreach (var curso in ViewBag.Cursos)
+    {
+        <option value="@curso.Id">@curso.Nombre</option>
+    }
+</select>
+
+<div id="modulosTable"></div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#cursosDropdown').change(function () {
+                var selectedCurso = $(this).val();
+                if (selectedCurso) {
+                    $.get('@Url.Action("GetModulos", "Curso")', { idCurso: selectedCurso }, function (data) {
+                        $('#modulosTable').html(data);
+                    });
+                } else {
+                    $('#modulosTable').empty();
+                }
+            });
+        });
+    </script>
+}

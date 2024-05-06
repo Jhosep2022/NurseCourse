@@ -1,0 +1,127 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Utiliza este layout si tienes uno, o define null para no usar ningún layout
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-image: url('/Resources/img/background.png');
+            background-size: cover;
+            background-blend-mode: darken;
+        }
+        .animation:hover {
+          transform: translateY(-2px);
+          border-top: 6px solid ;
+          transition: transform 0.2s;
+        }
+    </style>
+</head>
+<body>
+<h1 class="text-center mt-5">Herramientas</h1>
+<div class="m-4">
+  <div class="container">  
+    <div class="album py-3 bg-light mw-100">
+      <h5 class="text-center card mb-2 box-shadow mx-4 p-2">
+        Estas herramientas te ayudarán a registrar, gestionar los cursos, estudiantes y modulos de la plataforma.
+      </h5>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <a class="nav-link text-dark" asp-action="ListaCursos" asp-controller="Nurse">
+                <div class="animation">
+                  <div class="card mb-4 box-shadow" style="align-items: center;">
+                    <h5 class="m-1">Lista de cursos</h5>
+                    <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [60%x225]" src="https://cdn-icons-png.flaticon.com/512/2002/2002010.png" data-holder-rendered="true" style="height: 225px; width: 50%; display: block;">
+                    <div class="card-body">
+                      <p class="card-text">Aqui podrás ver la lista de cursos. En el detalle de cada curso ver sus estudiantes, modulos registrados, notas y gestionar examenes.</p>
+                    </div>
+                  </div>
+                </div>
+              </a>
+              
+              
+            </div>
+            <div class="col-md-6">
+              <a class="nav-link text-dark" asp-action="ListaUsers" asp-controller="Nurse">
+                <div class="animation">
+                  <div class="card mb-4 box-shadow" style="align-items: center;">
+                    <h5 class="m-1">Lista de estudiantes</h5>
+                    <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [60%x225]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyEHgoOxu6ijoCKPbj4w0eVdwbYoOh5QpepQ&usqp=CAU" data-holder-rendered="true" style="height: 225px; width: 50%; display: block;">
+                    <div class="card-body">
+                      <p class="card-text">Aqui podrás ver la lista completa de estudiantes con sus respectivos datos y cursos registrados.</p>
+                    </div>
+                  </div>
+                </div>
+              </a>              
+            </div>
+
+            <div class="col-md-6">
+              <a class="nav-link text-dark" asp-action="RegistroCurso" asp-controller="Nurse">
+                <div class="animation">
+                  <div class="card mb-4 box-shadow" style="align-items: center;">
+                    <h5 class="m-1">Registrar cursos</h5>
+                    <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [60%x225]" src="data:image/png;base64,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" data-holder-rendered="true" style="height: 225px; width: 50%; display: block;">
+                    <div class="card-body">
+                      <p class="card-text">Aqui podrás registrar nuevos cursos.</p>
+                    </div>
+                  </div>
+                </div> 
+              </a>
+                           
+            </div>
+            <div class="col-md-6">
+              <a class="nav-link text-dark" asp-action="RegistroModulo" asp-controller="Nurse">
+                <div class="animation">
+                  <div class="card mb-4 box-shadow" style="align-items: center;">
+                    <h5 class="m-1">Registrar modulos</h5>
+                    <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&amp;bg=55595c&amp;fg=eceeef&amp;text=Thumbnail" alt="Thumbnail [60%x225]" src="https://cdn-icons-png.flaticon.com/512/1232/1232761.png" data-holder-rendered="true" style="height: 225px; width: 50%; display: block;">
+                    <div class="card-body">
+                      <p class="card-text">Aqui podrás registrar modulos para sus cursos correspondientes.</p>
+                    </div>
+                  </div>
+                </div>
+              </a>              
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+</div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        function registrarUsuario() {
+            var usuario = {
+                Nombre: document.getElementById('Nombre').value,
+                CorreoElectronico: document.getElementById('CorreoElectronico').value,
+                Contraseña: document.getElementById('Contraseña').value,
+                Edad: parseInt(document.getElementById('Edad').value),
+                Cargo: document.getElementById('Cargo').value,
+                RolId: parseInt(document.getElementById('RolId').value)
+            };
+
+            fetch('http://localhost:5053/api/Usuarios/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(usuario)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('Usuario registrado con éxito!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al registrar el usuario');
+            });
+        }
+    </script>
+</body>
+</html>

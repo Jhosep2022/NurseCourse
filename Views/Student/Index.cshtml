@@ -1,0 +1,71 @@
+@using NurseCourse.Models
+@{
+    Layout = "~/Views/Shared/_Layout2.cshtml"; // Utiliza este layout si tienes uno, o define null para no usar ningún layout
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #F5F5F5;
+            background-size: cover;
+            background-blend-mode: darken;
+        }
+        .animation:hover {
+          transform: translateY(-3px);
+          border-bottom: 3px solid ;
+          background-color: #dbdbdb;
+          transition: transform 0.2s;
+        }
+        .titlenurse {
+            background-color: #D9D9D9;
+            display: flex;
+            padding: 10px;
+            padding-left: 15px;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+        }
+        form {
+            background-color: #F5F5F5;
+            padding: 20px;
+            width: 500px;
+        }
+        .imgsection {
+            display: flex;
+            justify-content: flex-end;
+            margin-left: auto; 
+        }
+        .subtitle {
+            padding: 2%;
+            background-color: black;
+            color: white;
+            width: 600px;
+        }
+        .container {
+            flex-direction: column;
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div class="titlenurse">
+    <h1 class="">Lista de cursos</h1>
+    <div class="imgsection"><img src="https://cdn.icon-icons.com/icons2/3005/PNG/512/modules_apps_icon_188198.png" alt="Curso" style="width: 100px; height: 100px;"></div>
+    
+</div>
+@foreach (var curso in Model){
+    <div class="card" style="width: 18rem;">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@curso.titulo</h5>
+            <p class="card-text">@curso.descripcion.</p>
+            <a href="@Url.Action("Curso", "Student", new { id = curso.cursoId })"><button type="button" class="btn btn-primary">Ver modulos</button></a>
+        </div>
+    </div>
+}
+</body>
+</html>

@@ -1,0 +1,192 @@
+@using NurseCourse.Models
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Utiliza este layout si tienes uno, o define null para no usar ningún layout
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #F5F5F5;
+            background-size: cover;
+            background-blend-mode: darken;
+        }
+        .animation:hover {
+          transform: translateY(-3px);
+          border-bottom: 3px solid ;
+          background-color: #dbdbdb;
+          transition: transform 0.2s;
+        }
+        .titlenurse {
+            background-color: #D9D9D9;
+            display: flex;
+            padding: 10px;
+            padding-left: 15px;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+        }
+        form {
+            background-color: #F5F5F5;
+            padding: 20px;
+            width: 500px;
+        }
+        .imgsection {
+            display: flex;
+            justify-content: flex-end;
+            margin-left: auto; 
+        }
+        .subtitle {
+            padding: 2%;
+            background-color: black;
+            color: white;
+            width: 600px;
+        }
+        .container {
+            flex-direction: column;
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="titlenurse">
+    <h1 class="">Modulos</h1>
+    <div class="imgsection"><img src="https://cdn-icons-png.flaticon.com/512/6681/6681144.png" alt="Curso" style="width: 100px; height: 100px;"></div>
+    
+</div>
+    <div class="container mt-5">      
+        <div>
+            <div class="subtitle">¡Crear un modulo nuevo!</div>
+        <div class="form-group mt-2">
+            <label for="moduloDropdown">Selecciona un curso para tu modulo:</label>
+            <select id="moduloDropdown" class="form-control w-50">
+                <option value="">Selecciona un curso</option>
+                @foreach (var curso in Model)
+                {
+                    <option value="@curso.cursoId">@curso.titulo</option>
+                }
+            </select>
+        </div>
+        <form id="crearContenidoForm" enctype="multipart/form-data">
+                <div class="form-group" style="display: none;">
+                    <label for="tipo">Tipo:</label>
+                    <input type="text" class="form-control" id="tipo" name="Tipo">
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="texto">Texto:</label>
+                    <textarea class="form-control" id="texto" name="Texto"></textarea>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="moduloId">ID del módulo:</label>
+                    <input type="number" class="form-control" id="moduloId" name="ModuloId">
+                </div>
+                <div class="form-group">
+                    <label for="file">Sube tu video para el módulo:</label>
+                    <input type="file" class="form-control-file" id="file" name="file">
+                </div>
+            </form>
+            <form id="crearContenidoForm" enctype="multipart/form-data">
+                <div class="form-group" style="display: none;">
+                    <label for="tipo">Tipo:</label>
+                    <input type="text" class="form-control" id="tipo" name="Tipo">
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="texto">Texto:</label>
+                    <textarea class="form-control" id="texto" name="Texto"></textarea>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="moduloId">ID del módulo:</label>
+                    <input type="number" class="form-control" id="moduloId" name="ModuloId">
+                </div>
+                <div class="form-group">
+                    <label for="file">Sube tu PDF para el módulo:</label>
+                    <input type="file" class="form-control-file" id="file" name="file">
+                </div>
+            </form>
+            <form>
+                <div class="form-group">
+                    <label for="nombre">Nombre del modulo:</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción del modulo:</label>
+                    <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="cursoId">ID del curso:</label>
+                    <input type="number" class="form-control" id="cursoId" name="cursoId" required>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="enviarModulo()">Enviar</button>
+            </form>
+        </div>
+        
+        <div id="tablaModulos">
+            <!-- Aquí se mostrará la tabla de módulos -->
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        async function enviarModulo() {
+            try {
+                const nombre = document.getElementById('nombre').value;
+                const descripcion = document.getElementById('descripcion').value;
+                const cursoId = document.getElementById('cursoId').value;
+
+                const modulo = {
+                    Nombre: nombre,
+                    Descripcion: descripcion,
+                    CursoId: cursoId
+                };
+
+                const response = await fetch('http://localhost:5053/api/Modulos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(modulo)
+                });
+
+                if (response.ok) {
+                    alert('Módulo creado exitosamente');
+                    enviarFormulario()
+                    // Redirigir a la página principal o a donde desees
+                    //window.location.href = '/Index';
+                } else {
+                    const errorMessage = await response.text();
+                    alert(`Error al crear el módulo: ${errorMessage}`);
+                }
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                alert('Error al enviar el formulario');
+            }
+        }
+        async function enviarFormulario() {
+            try {
+                const form = document.getElementById('crearContenidoForm');
+                const formData = new FormData(form);
+
+                const response = await fetch('http://localhost:5053/api/contenidos', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Contenido creado exitosamente');
+                    //window.location.href = '/Index'; // Redirigir a la página principal o a donde desees
+                } else {
+                    const errorMessage = await response.text();
+                    alert(`Error al crear el contenido: ${errorMessage}`);
+                }
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                alert('Error al enviar el formulario');
+            }
+        }
+    </script>
+</body>
+</html>
