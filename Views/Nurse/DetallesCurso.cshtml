@@ -40,14 +40,25 @@
             margin-left: auto; 
         }
         .subtitle {
-            padding: 2%;
+            margin: 1%;
+            padding: 1%;
             background-color: black;
             color: white;
-            width: 600px;
+            width: 400px;
+            align-items: center;
+            justify-items: center;
         }
         .container {
             flex-direction: column;
             display: flex;
+        }
+        .horizontal{
+            margin: 1%;
+            display: flex;
+            flex-direction: row;
+        }
+        h5{
+            margin: 1%;
         }
     </style>
 </head>
@@ -57,8 +68,11 @@
     <div class="imgsection"><img src="https://cdn.icon-icons.com/icons2/3005/PNG/512/modules_apps_icon_188198.png" alt="Curso" style="width: 100px; height: 100px;"></div>
     
 </div>
-<div class="diagnostico">Diagnostico: @ViewData["Link1"]</div>
-<div class="final">Examen final: @ViewData["Link2"]</div>
+<div class="horizontal">
+    <div class="subtitle">Diagnostico: @ViewData["Link1"]</div>
+<div class="subtitle">Examen final: @ViewData["Link2"]</div>
+</div>
+
 <h5>Tabla de modulos</h5>
 <table class="table">
     <thead>
