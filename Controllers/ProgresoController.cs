@@ -46,4 +46,35 @@ public class ProgresoController : ControllerBase
         }
     }
 
+    [HttpGet("usuario/{usuarioId}")]
+public async Task<ActionResult<IEnumerable<ProgresoDto>>> GetProgresoByUsuario(int usuarioId)
+{
+    try
+    {
+        var progresos = await _context.Progreso
+            .Where(p => p.UsuarioId == usuarioId)
+            .Select(p => new ProgresoDto
+            {
+                ProgresoId = p.ProgresoId,
+                ModuloActual = p.ModuloActual,
+                Completo = p.Completo,
+                ContenidoId = p.ContenidoId,
+                UsuarioId = p.UsuarioId
+            })
+            .ToListAsync();
+
+        if (progresos == null || !progresos.Any())
+        {
+            return NotFound($"No se encontraron progresos para el usuario con ID {usuarioId}");
+        }
+
+        return Ok(progresos);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+    }
+}
+
+
 }

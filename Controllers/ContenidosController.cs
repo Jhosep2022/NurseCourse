@@ -34,7 +34,7 @@ public class ContenidosController : ControllerBase
         var contenido = new Contenido
         {
             Tipo = createContenidoDto.Tipo,
-            Url = url, // Esto será la URL ordinaria
+            Url = url, 
             Texto = createContenidoDto.Texto,
             ModuloId = createContenidoDto.ModuloId
         };
@@ -42,15 +42,16 @@ public class ContenidosController : ControllerBase
         _context.Contenidos.Add(contenido);
         await _context.SaveChangesAsync();
 
-        // Crear automáticamente un progreso para cada usuario cuando se agrega un nuevo contenido
+        var contenidoId = contenido.ContenidoId;
+
         var usuarios = await _context.Usuarios.ToListAsync();
         foreach (var usuario in usuarios)
         {
             var progreso = new Progreso
             {
-                ModuloActual = 1, // O el módulo inicial correspondiente
+                ModuloActual = 1, 
                 Completo = false,
-                ContenidoId = contenido.ContenidoId,
+                ContenidoId = contenidoId, 
                 UsuarioId = usuario.UsuarioId
             };
 
@@ -61,15 +62,21 @@ public class ContenidosController : ControllerBase
 
         var presignedUrl = await _fileStorageService.GetPresignedUrlAsync(fileName);
 
-        return CreatedAtAction(nameof(GetContenido), new { id = contenido.ContenidoId }, new ContenidoDto
+        // Aquí creamos el ContenidoDto con el ID asignado correctamente
+        var contenidoDto = new ContenidoDto
         {
-            ContenidoId = contenido.ContenidoId,
+            ContenidoId = contenidoId, 
             Tipo = contenido.Tipo,
             Texto = contenido.Texto,
             ModuloId = contenido.ModuloId,
             Url = presignedUrl 
-        });
+        };
+
+        // Retornamos el ContenidoDto en la respuesta
+        return CreatedAtAction(nameof(GetContenido), new { id = contenidoId }, contenidoDto);
     }
+
+
 
 
     [HttpGet("ByModulo/{moduloId}")]

@@ -70,8 +70,16 @@ public class CursosController : ControllerBase
         _context.Cursos.Add(curso);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetCurso), new { id = curso.CursoId }, cursoDto);
+        var createdCursoDto = new CursoDto
+        {
+            CursoId = curso.CursoId,
+            Titulo = curso.Titulo,
+            Descripcion = curso.Descripcion
+        };
+
+        return createdCursoDto;
     }
+
 
     // PUT: api/Cursos/5
     [HttpPut("{id}")]

@@ -90,4 +90,48 @@ public class UsuariosController : ControllerBase
 
         return usuario;
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetAllUsuarios()
+    {
+        try
+        {
+            var usuarios = await _context.Usuarios
+                .Include(u => u.Progresos)
+                .Include(u => u.Rol)
+                .ToListAsync();
+
+            if (usuarios == null || !usuarios.Any())
+            {
+                return NotFound("No se encontraron usuarios.");
+            }
+
+            var usuariosDto = usuarios.Select(u => new UsuarioDto
+            {
+                UsuarioId = u.UsuarioId,
+                Nombre = u.Nombre,
+                CorreoElectronico = u.CorreoElectronico,
+                Contraseña = u.Contraseña,
+                Edad = u.Edad,
+                Cargo = u.Cargo,
+                RolId = u.RolId,
+                Progresos = u.Progresos.Select(p => new ProgresoDto
+                {
+                    // Asignar propiedades de ProgresoDto
+                }).ToList(),
+                NotasExamenes = u.NotasExamenes.Select(n => new NotaExamenDto
+                {
+                    // Asignar propiedades de NotaExamenDto
+                }).ToList()
+            }).ToList();
+
+            return Ok(usuariosDto);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+        }
+    }
+
+
 }
