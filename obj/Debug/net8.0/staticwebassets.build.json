@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "pTVSjh+PyjzgkGF1HdSm3Pv2doGaJgFH/1DLs2NtR6c=",
+  "Hash": "vKU81RbeL8i1o2mT3muJXDRbsz2KNerOyjxU1W98/eE=",
   "Source": "NurseCourse",
   "BasePath": "_content/NurseCourse",
   "Mode": "Default",
@@ -72,6 +72,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
+    },
+    {
+      "Identity": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\css\\stylex.css",
+      "SourceId": "NurseCourse",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\",
+      "BasePath": "_content/NurseCourse",
+      "RelativePath": "css/stylex.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\stylex.css"
     },
     {
       "Identity": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\favicon.ico",

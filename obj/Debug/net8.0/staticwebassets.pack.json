@@ -37,6 +37,10 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
+      "Id": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\css\\stylex.css",
+      "PackagePath": "staticwebassets\\css\\stylex.css"
+    },
+    {
       "Id": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
