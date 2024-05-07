@@ -40,13 +40,12 @@ public class UsuariosController : ControllerBase
         _context.Usuarios.Add(usuario);
         await _context.SaveChangesAsync();
 
-        // Crear automáticamente el progreso inicial para el nuevo usuario
-        var contenidoInicial = await _context.Contenidos.FirstOrDefaultAsync(); // Obtener el contenido inicial
+        var contenidoInicial = await _context.Contenidos.FirstOrDefaultAsync(); 
         if (contenidoInicial != null)
         {
             var progreso = new Progreso
             {
-                ModuloActual = 1, // O el módulo inicial correspondiente
+                ModuloActual = 1, 
                 Completo = false,
                 ContenidoId = contenidoInicial.ContenidoId,
                 UsuarioId = usuario.UsuarioId
@@ -63,14 +62,13 @@ public class UsuariosController : ControllerBase
     public async Task<ActionResult<Usuario>> Login(LoginDTO loginDto)
     {
         var usuario = await _context.Usuarios
-                                    .FirstOrDefaultAsync(u => u.CorreoElectronico == loginDto.UserName && u.Contraseña == loginDto.Password); // Considere mejorar la seguridad aquí
+                                    .FirstOrDefaultAsync(u => u.CorreoElectronico == loginDto.UserName && u.Contraseña == loginDto.Password); 
         
         if (usuario == null)
         {
             return Unauthorized("Credenciales inválidas");
         }
 
-        // Aquí podrías generar un token si estás usando JWT o simplemente retornar un resultado positivo
         return Ok(usuario);
     }
 
@@ -78,9 +76,9 @@ public class UsuariosController : ControllerBase
     public async Task<ActionResult<Usuario>> GetUsuario(int id)
     {
         var usuario = await _context.Usuarios
-            .Include(u => u.Progresos)
-            .Include(u => u.Nombre)
-            .Include(u => u.Rol)
+            .Include(u => u.Progresos) 
+            .Include(u => u.Rol)       
+            .Include(u => u.NotasExamenes)
             .FirstOrDefaultAsync(u => u.UsuarioId == id);
 
         if (usuario == null)
@@ -88,8 +86,9 @@ public class UsuariosController : ControllerBase
             return NotFound("Usuario no encontrado.");
         }
 
-        return usuario;
+        return Ok(usuario);
     }
+
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetAllUsuarios()
@@ -99,6 +98,7 @@ public class UsuariosController : ControllerBase
             var usuarios = await _context.Usuarios
                 .Include(u => u.Progresos)
                 .Include(u => u.Rol)
+                .Include(u => u.NotasExamenes) // Asegúrate de incluir las notas de exámenes
                 .ToListAsync();
 
             if (usuarios == null || !usuarios.Any())
@@ -117,11 +117,13 @@ public class UsuariosController : ControllerBase
                 RolId = u.RolId,
                 Progresos = u.Progresos.Select(p => new ProgresoDto
                 {
-                    // Asignar propiedades de ProgresoDto
                 }).ToList(),
                 NotasExamenes = u.NotasExamenes.Select(n => new NotaExamenDto
                 {
-                    // Asignar propiedades de NotaExamenDto
+                    NotaExamenId = n.NotaExamenId, 
+                    UsuarioId = n.UsuarioId,
+                    ExamenId = n.ExamenId,
+                    Calificacion = n.Calificacion
                 }).ToList()
             }).ToList();
 
@@ -132,6 +134,7 @@ public class UsuariosController : ControllerBase
             return StatusCode(500, $"Error interno del servidor: {ex.Message}");
         }
     }
+
 
 
 }
