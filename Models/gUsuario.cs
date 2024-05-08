@@ -10,6 +10,6 @@ public partial class gUsuario
     public string cargo { get; set; } = null!;
     public int rolId { get; set; }
     public virtual ICollection<Progreso> progresos { get; set; } = new List<Progreso>();
-    public virtual ICollection<NotaExamen> notasExamenes { get; set; } = new List<NotaExamen>(); // New collection
+    public virtual ICollection<gNotaExamen> notasExamenes { get; set; } = new List<gNotaExamen>(); // New collection
 }
 

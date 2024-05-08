@@ -50,10 +50,6 @@
                 <label for="Cargo" class="form-label">Cargo</label>
                 <input type="text" class="form-control" id="Cargo" name="Cargo" required>
             </div>
-            <div class="mb-3">
-                <label for="RolId" class="form-label">Rol ID</label>
-                <input type="number" class="form-control" id="RolId" name="RolId" required>
-            </div>
             <button type="button" class="btn btn-primary" onclick="registrarUsuario()">Registrar</button>
             <a class="ml-1" asp-action="Index" asp-controller="Login"><button class="btn btn-outline-info" type="button">Ir a login</button></a>
         </form>
@@ -70,7 +66,7 @@
                 Contraseña: document.getElementById('Contraseña').value,
                 Edad: parseInt(document.getElementById('Edad').value),
                 Cargo: document.getElementById('Cargo').value,
-                RolId: parseInt(document.getElementById('RolId').value)
+                RolId: 1
             };
 
             fetch('http://localhost:5053/api/Usuarios/register', {

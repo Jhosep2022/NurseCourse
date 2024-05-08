@@ -49,6 +49,14 @@
             flex-direction: column;
             display: flex;
         }
+        .titlemod{
+            margin: 1%;
+            padding: 1%;
+        }
+        .desc{
+            margin: 1%;
+            padding: 1%;
+        }
     </style>
 </head>
 <body>
@@ -58,34 +66,165 @@
     
 </div>
 <div class="accordion" id="accordionExample">
-    @if(Model == null)
+
+    
+    @if(Model.Item1 == null)
     {
         <p>No hay modulos registrados</p>
     }else{
-        @foreach (var modulo in Model){
-            <div class="accordion-item disabled" style="margin: 1%;">
-                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                <button disabled class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                    @modulo.nombre #@modulo.moduloID
-                </button>
-                </h2>
-                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                <div class="accordion-body">
-                    <div class="vertical">
-                        <div class="desc">
-                            @modulo.descripcion
+        @foreach (var modulo in Model.Item1){
+            @foreach (var restriccion in Model.Item2){
+                @if(restriccion.moduloActual<=modulo.moduloID && restriccion.progresoId == 2){
+                    <div class="accordion-item disabled" style="margin: 1%;">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button disabled class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            @modulo.nombre #@modulo.moduloID                            
+                        </button>
+                        <div class="titlemod">@modulo.nombre</div>
+                        </h2>
+                        <div class="form-group my-2">
+                            <div class="desc">Descripcion modulo:  @modulo.descripcion</div>    
+                            
+                            <label for="moduloDropdown">Selecciona un módulo:</label>
+                            <select id="moduloDropdown" class="form-control">
+                                <option value="">Selecciona un curso</option>
+                                <option value="@modulo.moduloID">xd</option>
+                            </select>
+                            
+                        </div>                            
+                        
+                        <div class="desc" id="tablaModulos">
+                            <!-- Aquí se mostrará la tabla de módulos -->
                         </div>
-                        <div class="button">
-                            @modulo.descripcion
+                        <div class="desc" id="tablaModulospdf">
+                            <!-- Aquí se mostrará la tabla de módulos -->
+                        </div>
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            
+                        </div>
                         </div>
                     </div>
-                    
-                </div>
-                </div>
-            </div>
+                }
+            }
+            
         }
     }
     
 </div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+        $('.btn-acceder').click(function () {
+            var usuarioId = $(this).data('usuario-id');
+            obtenerContenidos(usuarioId);
+            console.log(usuarioId);
+        });
+
+        $('.terminar-contenido').click(function () {
+            // Obtener los datos del botón
+            var progresoId = $(this).data('progreso-id');
+            var moduloActual = $(this).data('modulo-actual');
+            var completo = $(this).data('completo');
+            var contenidoId = $(this).data('contenido-id');
+            var usuarioId = $(this).data('usuario-id');
+            var cursoId = $(this).data('curso-id');
+
+            // Crear el cuerpo de la solicitud
+            var body = JSON.stringify({
+                "progresoId": progresoId,
+                "moduloActual": moduloActual,
+                "completo": completo,
+                "contenidoId": contenidoId,
+                "usuarioId": usuarioId,
+                "cursoId": cursoId
+            });
+
+            // Realizar la solicitud POST
+            fetch('http://localhost:5053/api/progreso/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: body
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Contenido terminado exitosamente');
+                } else {
+                    throw new Error('Error al terminar el contenido');
+                }
+            })
+            .catch(error => {
+                console.error('Error al terminar el contenido:', error);
+                alert('Error al terminar el contenido');
+            });
+        });
+
+        function obtenerContenidos(id) {
+            var listaContenidos = $('.lista-contenidos[data-usuario-id="' + id + '"]');
+            
+            $.get(`http://localhost:5053/api/contenidos/ByModulo/${id}`, function (data) {
+                console.log(data);
+                listaContenidos.empty();
+                $.each(data, function (index, contenido) {
+                    var contenidoTipo = contenido.tipo; // Obtén el tipo de contenido
+                    listaContenidos.append(`<li>${contenidoTipo}</li>`);
+                });
+                listaContenidos.show();
+            });
+        }
+    });
+        $(document).ready(function () {
+            $('.btn-acceder').click(function () {
+                var usuarioId = $(this).data('usuario-id');
+                obtenerContenidos(usuarioId);
+                console.log(usuarioId);
+            });
+
+            function obtenerContenidos(id) {
+                var listaContenidos = $('.lista-contenidos[data-usuario-id="' + id + '"]');
+                
+                $.get(`http://localhost:5053/api/contenidos/ByModulo/${id}`, function (data) {
+                    console.log(data);
+                    listaContenidos.empty();
+                    $.each(data, function (index, contenido) {
+                        var contenidoTipo = contenido.tipo; // Obtén el tipo de contenido
+                        listaContenidos.append(`<li>${contenidoTipo}</li>`);
+                    });
+                    listaContenidos.show();
+                });
+            }
+        });
+        $(document).ready(function () {
+            $('#moduloDropdown').change(function () {
+                var moduloIdSeleccionado = $(this).val();
+                // Realizar solicitud AJAX para obtener los módulos del curso seleccionado
+                $.ajax({
+                    url: 'http://localhost:5053/api/contenidos/ByModulo/' + moduloIdSeleccionado,
+                    method: 'GET',
+                    success: function (response) {
+                        // Construir la tabla HTML con los módulos recibidos
+                        var modulos = response['$values'];
+                        var tablaHtml = '<table class="table"><thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th></th></tr></thead><tbody>';
+                        var video = '<video width="auto" height="auto" controls><source [src]="'+modulos[0].url+'" type="video/mp4"></video>' 
+                        var pdf = '<a href="'+modulos[0].url+'"><button type="button" class="btn btn-primary">Descargar PDF</button></a>'
+                        $.each(modulos, function (index, modulo) {
+                            tablaHtml += '<tr><td>' + modulo.contenidoId + '</td><td>' + modulo.contenidoId + '</td><td>' + modulo.tipo + '</td><td><a href="/Nurse/DetallesModulo/'+modulo.tipo+'"></a></td></tr>';
+                        });
+                        tablaHtml += '</tbody></table>';
+                        // Mostrar la tabla de módulos en el elemento con ID 'tablaModulos'
+                        $('#tablaModulos').html(video);
+                        $('#tablaModulospdf').html(pdf);
+                    },
+                    error: function () {
+                        alert('Error al obtener los módulos del curso seleccionado.');
+                    }
+                });
+            });
+        });
+    </script>
+    }
 </body>
 </html>

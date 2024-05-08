@@ -61,6 +61,7 @@ namespace NurseCourse.Controllers
         }
 
         // POST: api/Modulos
+        // POST: api/Modulos
         [HttpPost]
         public async Task<ActionResult<ModuloDto>> CreateModulo([FromBody] ModuloDto moduloDto)
         {
@@ -73,8 +74,11 @@ namespace NurseCourse.Controllers
             _context.Modulos.Add(modulo);
             await _context.SaveChangesAsync();
 
+            moduloDto.ModuloID = modulo.ModuloID;
+
             return CreatedAtAction(nameof(GetModulo), new { id = modulo.ModuloID }, moduloDto);
         }
+
 
         // PUT: api/Modulos/5
         [HttpPut("{id}")]
@@ -90,7 +94,7 @@ namespace NurseCourse.Controllers
             {
                 return NotFound();
             }
-
+            modulo.ModuloID = moduloDto.ModuloID;
             modulo.Nombre = moduloDto.Nombre;
             modulo.Descripcion = moduloDto.Descripcion;
             modulo.CursoId = moduloDto.CursoId;

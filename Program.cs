@@ -21,7 +21,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(cookie =>
     {
-        cookie.LoginPath = "/Access/Login"; 
+        cookie.LoginPath = "/Login/Index"; 
         cookie.ExpireTimeSpan = TimeSpan.FromDays(7); 
         cookie.SlidingExpiration = true;
     });
@@ -57,7 +57,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Access}/{action=Login}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();
 

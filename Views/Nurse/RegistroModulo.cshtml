@@ -71,7 +71,7 @@
                 }
             </select>
         </div>
-        <form id="crearContenidoForm" enctype="multipart/form-data">
+        <form id="crearContenidoFormVideo" enctype="multipart/form-data">
                 <div class="form-group" style="display: none;">
                     <label for="tipo">Tipo:</label>
                     <input type="text" class="form-control" id="tipo" name="Tipo">
@@ -89,7 +89,7 @@
                     <input type="file" class="form-control-file" id="file" name="file">
                 </div>
             </form>
-            <form id="crearContenidoForm" enctype="multipart/form-data">
+            <form id="crearContenidoFormPDF" enctype="multipart/form-data">
                 <div class="form-group" style="display: none;">
                     <label for="tipo">Tipo:</label>
                     <input type="text" class="form-control" id="tipo" name="Tipo">
@@ -116,10 +116,6 @@
                     <label for="descripcion">Descripción del modulo:</label>
                     <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
                 </div>
-                <div class="form-group">
-                    <label for="cursoId">ID del curso:</label>
-                    <input type="number" class="form-control" id="cursoId" name="cursoId" required>
-                </div>
                 <button type="button" class="btn btn-primary" onclick="enviarModulo()">Enviar</button>
             </form>
         </div>
@@ -131,11 +127,17 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        var moduloIdSeleccionado;
+        $(document).ready(function () {
+            $('#moduloDropdown').change(function () {
+                moduloIdSeleccionado = $(this).val();
+            });
+        });
         async function enviarModulo() {
             try {
                 const nombre = document.getElementById('nombre').value;
                 const descripcion = document.getElementById('descripcion').value;
-                const cursoId = document.getElementById('cursoId').value;
+                const cursoId = moduloIdSeleccionado;
 
                 const modulo = {
                     Nombre: nombre,
@@ -152,8 +154,11 @@
                 });
 
                 if (response.ok) {
-                    alert('Módulo creado exitosamente');
-                    enviarFormulario()
+                    data= await response.json();
+                    console.log('Módulo creado exitosamente'+data.moduloID);
+                    alert('Módulo creado exitosamente'+data.moduloID);
+                    enviarFormularioPDF(data.moduloID);
+                    enviarFormularioVideo(data.moduloID);
                     // Redirigir a la página principal o a donde desees
                     //window.location.href = '/Index';
                 } else {
@@ -165,10 +170,66 @@
                 alert('Error al enviar el formulario');
             }
         }
-        async function enviarFormulario() {
+        async function enviarFormularioPDF(id) {
             try {
-                const form = document.getElementById('crearContenidoForm');
+                const form = document.getElementById('crearContenidoFormPDF');
                 const formData = new FormData(form);
+
+                // Obtener el valor actual de ModuloId
+                let moduloId = formData.get('ModuloId');
+                let tipo = formData.get('Tipo');
+                let texto = formData.get('Texto');
+
+
+                // Modificar el valor de ModuloId según tus necesidades
+                // Por ejemplo, asignarle el valor de otra variable o hacer algún cálculo
+                moduloId = id; // Aquí puedes asignarle el valor que desees
+                tipo = "video";
+                texto = "texto";
+
+                // Actualizar el valor de ModuloId en el FormData
+                formData.set('ModuloId', moduloId);
+                formData.set('Tipo', tipo);
+                formData.set('Texto', texto);
+
+                const response = await fetch('http://localhost:5053/api/contenidos', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Contenido creado exitosamente');
+                    //window.location.href = '/Index'; // Redirigir a la página principal o a donde desees
+                } else {
+                    const errorMessage = await response.text();
+                    alert(`Error al crear el contenido: ${errorMessage}`);
+                }
+            } catch (error) {
+                console.error('Error al enviar el formulario:', error);
+                alert('Error al enviar el formulario');
+            }
+        }
+        async function enviarFormularioVideo(id) {
+            try {
+                const form = document.getElementById('crearContenidoFormVideo');
+                const formData = new FormData(form);
+
+                // Obtener el valor actual de ModuloId
+                let moduloId = formData.get('ModuloId');
+                let tipo = formData.get('Tipo');
+                let texto = formData.get('Texto');
+
+
+                // Modificar el valor de ModuloId según tus necesidades
+                // Por ejemplo, asignarle el valor de otra variable o hacer algún cálculo
+                moduloId = id; // Aquí puedes asignarle el valor que desees
+                tipo = "pdf";
+                texto = "texto";
+
+                // Actualizar el valor de ModuloId en el FormData
+                formData.set('ModuloId', moduloId);
+                formData.set('Tipo', tipo);
+                formData.set('Texto', texto);
 
                 const response = await fetch('http://localhost:5053/api/contenidos', {
                     method: 'POST',

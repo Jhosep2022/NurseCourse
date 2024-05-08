@@ -84,32 +84,32 @@ public class ContenidosController : ControllerBase
     {
         var contenidos = await _context.Contenidos
             .Where(c => c.ModuloId == moduloId)
-            .Select(c => new ContenidoDto
-            {
-                ContenidoId = c.ContenidoId,
-                Tipo = c.Tipo,
-                Url = c.Url,
-                Texto = c.Texto,
-                ModuloId = c.ModuloId
-            })
             .ToListAsync();
 
-        return Ok(contenidos);
+        List<ContenidoDto> contenidosDto = new List<ContenidoDto>();
+
+        foreach (var contenido in contenidos)
+        {
+            var presignedUrl = await _fileStorageService.GetPresignedUrlAsync(Path.GetFileName(contenido.Url));
+            contenidosDto.Add(new ContenidoDto
+            {
+                ContenidoId = contenido.ContenidoId,
+                Tipo = contenido.Tipo,
+                Url = presignedUrl,
+                Texto = contenido.Texto,
+                ModuloId = contenido.ModuloId
+            });
+        }
+
+        return Ok(contenidosDto);
     }
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ContenidoDto>> GetContenido(int id)
     {
         var contenido = await _context.Contenidos
             .Where(c => c.ContenidoId == id)
-            .Select(c => new ContenidoDto
-            {
-                ContenidoId = c.ContenidoId,
-                Tipo = c.Tipo,
-                Url = c.Url,
-                Texto = c.Texto,
-                ModuloId = c.ModuloId
-            })
             .FirstOrDefaultAsync();
 
         if (contenido == null)
@@ -117,9 +117,17 @@ public class ContenidosController : ControllerBase
             return NotFound($"No se encontró contenido con ID {id}");
         }
 
-        return Ok(contenido);
+        var presignedUrl = await _fileStorageService.GetPresignedUrlAsync(Path.GetFileName(contenido.Url));
+
+        var contenidoDto = new ContenidoDto
+        {
+            ContenidoId = contenido.ContenidoId,
+            Tipo = contenido.Tipo,
+            Url = presignedUrl,
+            Texto = contenido.Texto,
+            ModuloId = contenido.ModuloId
+        };
+
+        return Ok(contenidoDto);
     }
-
-
-    // Add other CRUD operations as needed
 }

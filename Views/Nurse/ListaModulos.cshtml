@@ -53,12 +53,16 @@
     </style>
 </head>
 <body>
+    <div class="titlenurse">
+    <h1 class="">Lista de Módulos</h1>
+    <div class="imgsection"><img src="https://cdn.icon-icons.com/icons2/3005/PNG/512/modules_apps_icon_188198.png" alt="Curso" style="width: 100px; height: 100px;"></div>
+    
+</div>
     <div class="container mt-5">
-        <h1>Lista de Módulos</h1>
-        <div class="form-group">
+        <div class="form-group my-2">
             <label for="moduloDropdown">Selecciona un módulo:</label>
             <select id="moduloDropdown" class="form-control">
-                <option value="">Selecciona un módulo</option>
+                <option value="">Selecciona un curso</option>
                 @foreach (var curso in Model)
                 {
                     <option value="@curso.cursoId">@curso.titulo</option>
@@ -84,7 +88,7 @@
                         var modulos = response['$values'];
                         var tablaHtml = '<table class="table"><thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th></th></tr></thead><tbody>';
                         $.each(modulos, function (index, modulo) {
-                            tablaHtml += '<tr><td>' + modulo.moduloID + '</td><td>' + modulo.nombre + '</td><td>' + modulo.descripcion + '</td><td><a href="/Nurse/DetallesModulo/'+modulo.moduloID+'"><button type="button" class="btn btn-primary">Ver modulos</button></a></td></tr>';
+                            tablaHtml += '<tr><td>' + modulo.moduloID + '</td><td>' + modulo.nombre + '</td><td>' + modulo.descripcion + '</td><td><a href="/Nurse/DetallesModulo/'+modulo.moduloID+'"></a></td></tr>';
                         });
                         tablaHtml += '</tbody></table>';
                         // Mostrar la tabla de módulos en el elemento con ID 'tablaModulos'

@@ -137,7 +137,38 @@ public class NurseController : Controller
                     personas = null;
                 }
             }
-        }        
+        }       
+        List<gUsuario> score = new List<gUsuario>();
+
+        using (var httpClient = new HttpClient())
+        {
+            using (var response = await httpClient.GetAsync("http://localhost:5053/api/usuarios"))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    score = JsonConvert.DeserializeObject<List<gUsuario>>(apiResponse);
+
+                    // Iterar sobre cada usuario para obtener sus notas de exámenes
+                    foreach(var usuario in score)
+                    {
+                        Console.WriteLine($"Usuario ID: {usuario.usuarioId}, Nombre: {usuario.nombre}");
+
+                        // Iterar sobre las notas de exámenes del usuario
+                        foreach(var notaExamen in usuario.notasExamenes)
+                        {
+                            Console.WriteLine($"Nota del Examen - ID: {notaExamen.notaExamenId}, Calificación: {notaExamen.calificacion}");
+                        }
+                    }
+                }
+                else
+                {
+                    score = null;
+                }
+            }
+        }
+    
+        ViewData["id"] = id;
         ViewData["Link1"] = examenes[0].linkExame;
         ViewData["Link2"] = examenes[1].linkExame;
         ViewData["NumTimes"] = examenes.Count;

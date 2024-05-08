@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 using NewtonsoftJson = Newtonsoft.Json;
+using NurseCourse.Models.DTOs;
 
 namespace NurseCourse.Controllers;
 
@@ -62,7 +63,21 @@ public class StudentController : Controller
                 }
             }
         }
-
-        return View(modulos);
+        List<gProgreso> permitidos = new List<gProgreso>();
+        using (var httpClient = new HttpClient())
+        {
+            using (var response = await httpClient.GetAsync("http://localhost:5053/api/progreso/usuario/2"))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    permitidos = JsonConvert.DeserializeObject<List<gProgreso>>(apiResponse);
+                }else{
+                    permitidos = null;
+                }
+            }
+        }
+        var model = Tuple.Create(modulos, permitidos);
+        return View(model);
     }
 }

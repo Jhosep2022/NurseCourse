@@ -69,18 +69,22 @@
     
 </div>
 <div class="horizontal">
-    <div class="subtitle">Diagnostico: @ViewData["Link1"]</div>
-<div class="subtitle">Examen final: @ViewData["Link2"]</div>
+    @if(@ViewData["Link1"] == null || @ViewData["Link2"] == null){
+        <p>No hay links</p>
+    }else{
+        <div class="subtitle">Diagnostico: @ViewData["Link1"]</div>
+        <div class="subtitle">Examen final: @ViewData["Link2"]</div>
+    }
 </div>
-
-<h5>Tabla de modulos</h5>
+<h5>Tabla de estudiantes</h5>
 <table class="table">
     <thead>
         <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Email</th>
-            <th></th>
+            <th>Nota actual</th>
+            <th>Actualizar nota</th>
         </tr>
     </thead>
     <tbody>
@@ -95,8 +99,18 @@
             <tr class="animation">
                 <td>@modulo.usuarioId</td>
                 <td>@modulo.nombre</td>
-                <td>@modulo.correoElectronico</td>
-                <td><a href="@Url.Action("ListaModulos", "Nurse", new { id = modulo.usuarioId })"><button type="button" class="btn btn-primary">Ver modulos</button></a></td>
+                <td>@modulo.correoElectronico</td>                
+                <td>
+                     @foreach (var notas in modulo.notasExamenes){
+                       @notas.calificacion
+                     }
+                </td>
+                <td>
+                    <div class="mb-3">
+                        <input type="number" class="form-control" id="Diagnostico" name="Diagnostico" required>
+                    </div>
+                </td>
+                <td><a href="@Url.Action("ListaModulos", "Nurse", new { id = modulo.usuarioId })"><button type="button" class="btn btn-primary">Actualizar</button></a></td>
             </tr>
         }
     }
@@ -133,5 +147,79 @@
     
     </tbody>
 </table>
+    <script>
+        function submitCurso() {
+            var curso = {
+                Descripcion: document.getElementById('Diagnostico').value
+            };
+
+            fetch('http://localhost:5053/api/Cursos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(curso)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                submitExamenFinal(data.cursoId);
+                submitDiagnostico(data.cursoId);
+                alert('curso registrado con éxito!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al registrar el curso');
+            });
+        }
+        function submitExamenFinal(id) {
+            var examenfinal = {
+                Titulo: "Examen Final",
+                CursoId: id,
+                LinkExame: document.getElementById('Final').value
+            };
+
+            fetch('http://localhost:5053/api/Examenes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(examenfinal)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('examenfinal registrado con éxito!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al registrar el examenfinal');
+            });
+        }
+        function submitDiagnostico(id) {
+            var examendiagno = {
+                Titulo: "Diagnostico",
+                CursoId: id,
+                LinkExame: document.getElementById('Diagnostico').value
+            };
+
+            fetch('http://localhost:5053/api/Examenes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(examendiagno)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert('examendiagno registrado con éxito!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al registrar el examendiagno');
+            });
+        }
+    </script>
 </body>
 </html>
