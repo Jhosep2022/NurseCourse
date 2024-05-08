@@ -61,7 +61,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Nombre</th>
             <th>Email</th>
             <th>Cargo</th>
@@ -71,7 +70,6 @@
     @foreach (var users in Model)
     {
         <tr class="animation">
-            <td>@users.usuarioId</td>
             <td>@users.nombre</td>
             <td>@users.correoElectronico</td>
             <td>@users.cargo</td>
@@ -79,5 +77,13 @@
     }
     </tbody>
 </table>
+<script>
+    var valor = sessionStorage.getItem('UserRole');
+      console.log("UserRole:"+valor);
+      if(valor == 1){
+        console.log("eres user, fuera de aqui");
+        window.location.href = "http://localhost:5053/Student/Index";
+      }
+</script>
 </body>
 </html>

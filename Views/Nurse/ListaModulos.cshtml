@@ -76,6 +76,12 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
+        var valor = sessionStorage.getItem('UserRole');
+        console.log("UserRole:"+valor);
+        if(valor == 1){
+            console.log("eres user, fuera de aqui");
+            window.location.href = "http://localhost:5053/Student/Index";
+        }
         $(document).ready(function () {
             $('#moduloDropdown').change(function () {
                 var moduloIdSeleccionado = $(this).val();
@@ -86,9 +92,9 @@
                     success: function (response) {
                         // Construir la tabla HTML con los módulos recibidos
                         var modulos = response['$values'];
-                        var tablaHtml = '<table class="table"><thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th></th></tr></thead><tbody>';
+                        var tablaHtml = '<table class="table"><thead><tr><th>Nombre</th><th>Descripción</th><th></th></tr></thead><tbody>';
                         $.each(modulos, function (index, modulo) {
-                            tablaHtml += '<tr><td>' + modulo.moduloID + '</td><td>' + modulo.nombre + '</td><td>' + modulo.descripcion + '</td><td><a href="/Nurse/DetallesModulo/'+modulo.moduloID+'"></a></td></tr>';
+                            tablaHtml += '<tr><td>' + modulo.nombre + '</td><td>' + modulo.descripcion + '</td><td><a href="/Nurse/DetallesModulo/'+modulo.moduloID+'"></a></td></tr>';
                         });
                         tablaHtml += '</tbody></table>';
                         // Mostrar la tabla de módulos en el elemento con ID 'tablaModulos'

@@ -61,7 +61,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
             <th></th>
@@ -71,7 +70,6 @@
     @foreach (var curso in Model)
     {
         <tr class="animation">
-            <td>@curso.cursoId</td>
             <td>@curso.titulo</td>
             <td>@curso.descripcion</td>
             <td><a href="@Url.Action("DetallesCurso", "Nurse", new { id = curso.cursoId })"><button type="button" class="btn btn-primary">Administrar curso</button></a></td>
@@ -79,5 +77,11 @@
     }
     </tbody>
 </table>
+<script>
+    var valor = sessionStorage.getItem('UserRole');
+    if(valor == "Student"){
+        document.getElementById("btnNurse").style.display = "none";
+    }
+</script>
 </body>
 </html>

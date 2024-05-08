@@ -66,5 +66,13 @@
         </div>
     </div>
 }
+<script>
+    var valor = sessionStorage.getItem('UserRole');
+      console.log("UserRole:"+valor);
+      if(valor == 2){
+        console.log("eres admin, fuera de aqui");
+        window.location.href = "http://localhost:5053/Nurse/Index";
+      }
+</script>
 </body>
 </html>

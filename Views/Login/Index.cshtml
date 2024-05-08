@@ -67,18 +67,17 @@
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => {
-                dataaux = response.json();
-                if (response.ok) {
-                    console.log(dataaux.rolId);
-                    if (dataaux.rolId === 2) {
-                        window.location.href = '/Nurse/Index';
-                    } else {
-                        window.location.href = '/Student/Index';
-                    }
-                } else {
-                    // Handle error response here
-                    console.error('Error en la solicitud:', response);
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data.rolId);
+                sessionStorage.setItem('UserID', data.usuarioId);
+                sessionStorage.setItem('UserRole', data.rolId);
+                if (data.rolId == 2) {
+                    window.location.href = '/Nurse/Index';
+                    console.log('rol1');
+                } else if (data.rolId == 1) {
+                    window.location.href = '/Student/Index';
+                    console.log('rol2');
                 }
             })
             .catch(error => {

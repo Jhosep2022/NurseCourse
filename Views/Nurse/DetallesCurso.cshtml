@@ -19,6 +19,7 @@
           border-bottom: 3px solid ;
           background-color: #dbdbdb;
           transition: transform 0.2s;
+    using Microsoft.EntityFrameworkCore.Metadata.Internal;
         }
         .titlenurse {
             background-color: #D9D9D9;
@@ -80,7 +81,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Nombre</th>
             <th>Email</th>
             <th>Nota actual</th>
@@ -96,21 +96,33 @@
     }else{
         @foreach (var modulo in Model.Item2)
         {
+            var idnew = (int)(@ViewData["id"] ?? 0);
+            var idUser = @modulo.usuarioId;
+
             <tr class="animation">
-                <td>@modulo.usuarioId</td>
                 <td>@modulo.nombre</td>
                 <td>@modulo.correoElectronico</td>                
                 <td>
-                     @foreach (var notas in modulo.notasExamenes){
-                       @notas.calificacion
+                    @if(modulo.nombre != null){
+                        var aux = 0; 
+                        var IdScore = 0; 
+                        @foreach (var notas in modulo.notasExamenes){
+                        var id = (int)(@ViewData["id"] ?? 0);                                              
+                        @if(@notas.examenId == id){
+                            IdScore = (int)(@notas.calificacion);                                                       
+                        }                       
                      }
+                     @IdScore
+                    }
+                     
+                     
                 </td>
                 <td>
                     <div class="mb-3">
                         <input type="number" class="form-control" id="Diagnostico" name="Diagnostico" required>
                     </div>
                 </td>
-                <td><a href="@Url.Action("ListaModulos", "Nurse", new { id = modulo.usuarioId })"><button type="button" class="btn btn-primary">Actualizar</button></a></td>
+                <td><button type="button" class="btn btn-primary" onclick="actualizarNotas(@idnew, @idUser)">Actualizar</button></td>
             </tr>
         }
     }
@@ -121,7 +133,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
             <th></th>
@@ -137,10 +148,8 @@
         @foreach (var modulo in Model.Item1)
         {
             <tr class="animation">
-                <td>@modulo.moduloID</td>
                 <td>@modulo.nombre</td>
                 <td>@modulo.descripcion</td>
-                <td><a href="@Url.Action("ListaModulos", "Nurse", new { id = modulo.moduloID })"><button type="button" class="btn btn-primary">Ver modulos</button></a></td>
             </tr>
         }
     }
@@ -148,6 +157,12 @@
     </tbody>
 </table>
     <script>
+        var valor = sessionStorage.getItem('UserRole');
+        console.log("UserRole:"+valor);
+        if(valor == 1){
+            console.log("eres user, fuera de aqui");
+            window.location.href = "http://localhost:5053/Student/Index";
+        }
         function submitCurso() {
             var curso = {
                 Descripcion: document.getElementById('Diagnostico').value
@@ -220,6 +235,37 @@
                 alert('Error al registrar el examendiagno');
             });
         }
+            function actualizarNotas(holax, iduser) {
+                
+                console.log(iduser+"hola:"+holax);
+                 // Crear objeto de solicitud
+                var xhr = new XMLHttpRequest();
+
+                // Configurar la solicitud
+                xhr.open("POST", "http://localhost:5053/api/NotaExamenes", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                // Definir el cuerpo de la solicitud
+                var body = JSON.stringify({
+                    "UsuarioId": iduser,
+                    "ExamenId": holax,
+                    "Calificacion": document.getElementById('Diagnostico').value
+                });
+
+                // Manejar la respuesta de la solicitud
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                    console.log("Notas actualizadas exitosamente.");
+                    window.location.href ="http://localhost:5053/Nurse/DetallesCurso/"+holax
+                    } else {
+                    console.error("Error al actualizar las notas. Código de estado: " + xhr.status);
+                    window.location.href = "http://localhost:5053/Nurse/DetallesCurso/"+holax
+                    }
+                };
+
+                // Enviar la solicitud
+                xhr.send(body);
+            }
     </script>
 </body>
 </html>

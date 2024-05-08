@@ -16,6 +16,8 @@ public partial class gNotaExamen
     [ForeignKey("Examen")]
     public int examenId { get; set; }
 
+    public int CursoId { get; set; }
+
     public double calificacion { get; set; }
 
     public virtual Usuario Usuario { get; set; }
