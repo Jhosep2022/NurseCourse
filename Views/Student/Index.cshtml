@@ -57,6 +57,10 @@
     <div class="imgsection"><img src="https://cdn.icon-icons.com/icons2/3005/PNG/512/modules_apps_icon_188198.png" alt="Curso" style="width: 100px; height: 100px;"></div>
     
 </div>
+<video width="640" height="360" controls>
+        <source src='http://localhost:9000/contenidos/32e05a70-59df-4752-82ce-ef8c28a7f5c3_Desktop%202024.05.07%20-%2009.22.19.02.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minio%2F20240508%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240508T224950Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=43d011130412e221147ee86db2f2cf1928c4840f6c312a3917068ea60b2e7c55' type="video/mp4">
+        Tu navegador no soporta la reproducción de vídeo.
+    </video>
 @foreach (var curso in Model){
     <div class="card m-1" style="width: 18rem;">
         <div class="card-body">
@@ -72,7 +76,8 @@
       if(valor == 2){
         console.log("eres admin, fuera de aqui");
         window.location.href = "http://localhost:5053/Nurse/Index";
-      }
+    }
+    
 </script>
 </body>
 </html>

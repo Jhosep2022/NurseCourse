@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vKU81RbeL8i1o2mT3muJXDRbsz2KNerOyjxU1W98/eE=",
+  "Hash": "U504a03u2/AHNbe1V4eVAfKuGBKSmc9we28Eo3vWs/A=",
   "Source": "NurseCourse",
   "BasePath": "_content/NurseCourse",
   "Mode": "Default",
@@ -1212,6 +1212,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\Resources\\img\\127ac926-bdf8-4a80-938e-f5fc8814c79e_Desktop 2024.05.07 - 09.50.44.04 (1).mp4",
+      "SourceId": "NurseCourse",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\",
+      "BasePath": "_content/NurseCourse",
+      "RelativePath": "Resources/img/127ac926-bdf8-4a80-938e-f5fc8814c79e_Desktop 2024.05.07 - 09.50.44.04 (1).mp4",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Resources\\img\\127ac926-bdf8-4a80-938e-f5fc8814c79e_Desktop 2024.05.07 - 09.50.44.04 (1).mp4"
     },
     {
       "Identity": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\wwwroot\\Resources\\img\\background.png",

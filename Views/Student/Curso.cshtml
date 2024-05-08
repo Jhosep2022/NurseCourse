@@ -135,7 +135,11 @@
             .then(data => {
                 console.log('Success:', data['$values']);
                 var modulos = data['$values'];
-                var video = '<video width="auto" height="auto" controls><source [src]="'+modulos[1].url+'" type="video/mp4"></video>' 
+                var linkvideo1 = 'http://localhost:9000/contenidos/32e05a70-59df-4752-82ce-ef8c28a7f5c3_Desktop%202024.05.07%20-%2009.22.19.02.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minio%2F20240508%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20240508T224950Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=43d011130412e221147ee86db2f2cf1928c4840f6c312a3917068ea60b2e7c55';
+                var linkvideo = String(modulos[1].url);
+                var modulos = data['$values'];
+                var video = '<video width="640" height="360" controls><source src="'+linkvideo+'">Tu navegador no soporta la reproducción de vídeo.</video>';
+
                 var pdf = '<a href="'+modulos[0].url+'"><button type="button" class="btn btn-primary">Descargar PDF</button></a>'
                 // Mostrar la tabla de módulos en el elemento con ID 'tablaModulos'
                 console.log(video);
