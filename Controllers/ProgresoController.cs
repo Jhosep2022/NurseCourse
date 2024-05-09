@@ -20,11 +20,17 @@ namespace NurseCourse.Controllers
             _context = context;
         }
 
-        [HttpPost("update")]
+        [HttpPut("update")] 
         public async Task<IActionResult> UpdateProgreso([FromBody] ProgresoDto progresoDto)
         {
             try
             {
+                var contenidoExists = await _context.Contenidos.AnyAsync(c => c.ContenidoId == progresoDto.ContenidoId);
+                if (!contenidoExists)
+                {
+                    return NotFound($"Contenido con ID {progresoDto.ContenidoId} no encontrado.");
+                }
+
                 var progreso = await _context.Progreso
                     .Include(p => p.Contenido)
                     .ThenInclude(c => c.Modulo)
@@ -43,7 +49,11 @@ namespace NurseCourse.Controllers
                 _context.Progreso.Update(progreso);
                 await _context.SaveChangesAsync();
 
-                return NoContent();
+                return NoContent(); // Retorna 204 No Content cuando la actualización es exitosa
+            }
+            catch (DbUpdateException dbEx)
+            {
+                return StatusCode(500, $"Error de base de datos: {dbEx.InnerException?.Message ?? dbEx.Message}");
             }
             catch (Exception ex)
             {
@@ -67,7 +77,7 @@ namespace NurseCourse.Controllers
                         Completo = p.Completo,
                         ContenidoId = p.ContenidoId,
                         UsuarioId = p.UsuarioId,
-                        CursoId = p.Contenido.Modulo.CursoId // Asignación del curso ID
+                        CursoId = p.Contenido.Modulo.CursoId
                     })
                     .ToListAsync();
 

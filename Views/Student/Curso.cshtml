@@ -1,5 +1,6 @@
 @using NurseCourse.Models
-@{
+@{  
+        var counter = 0;
     Layout = "~/Views/Shared/_Layout2.cshtml"; // Utiliza este layout si tienes uno, o define null para no usar ningún layout
 }
 <!DOCTYPE html>
@@ -53,6 +54,11 @@
             margin: 1%;
             padding: 1%;
         }
+        .horizontal{
+            margin: 1%;
+            display: flex;
+            flex-direction: row;
+        }
         .desc{
             margin: 1%;
             padding: 1%;
@@ -68,51 +74,65 @@
 <div class="accordion" id="accordionExample">
 
     
-    @if(Model.Item1 == null)
+    @if(Model.Item1 == null || Model.Item2 == null)
     {
         <p>No hay modulos registrados</p>
     }else{
-        @foreach (var modulo in Model.Item1){
-            var idModulo = modulo.moduloID;
-            var RuteVideo = "tablaModulos"+modulo.moduloID;
-            var RutePdf = "tablaModulospdf"+modulo.moduloID;
-            @foreach (var restriccion in Model.Item2){
-                @if(restriccion.moduloActual<=modulo.moduloID && restriccion.progresoId == 2){
-                    <div class="accordion-item disabled" style="margin: 1%;">
-                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                        <button disabled class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            @modulo.nombre #@modulo.moduloID                            
-                        </button>
-                        <div class="titlemod">@modulo.nombre</div>
-                        </h2>
-                        <div class="form-group my-2">
-                            <div class="desc">Descripcion modulo:  @modulo.descripcion</div>
-                            <button class="btn btn-primary mx-3" onclick="actualizarNotas(@idModulo, 2)">Ver módulo</button>
-                            
-                        </div>                            
-                        
-                        <div class="desc" id="@RuteVideo">
-                            <!-- Aquí se mostrará la tabla de módulos -->
-                        </div>
-                        <div class="desc" id="@RutePdf">
-                            <!-- Aquí se mostrará la tabla de módulos -->
-                        </div>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                        <div class="accordion-body">
-                            
-                        </div>
-                        </div>
-                    </div>
+        var idmodulos = Model.Item2.Count;
+        var iterador = (int)(@ViewData["iterador"] ?? 0);
+        var idcurso = (int)(@ViewData["id"] ?? 0);
+        var modulo = Model.Item1;
+        var idModulo = modulo[@counter].moduloID;
+        var RuteVideo = "tablaModulos"+modulo[@counter].moduloID;
+        var RutePdf = "tablaModulospdf"+modulo[@counter].moduloID;
+        <div class="horizontal">
+            @if(@ViewData["Link1"] == null || @ViewData["Link2"] == null){
+                <p>No hay links</p>
+            }else{
+                <div class="subtitle">Diagnostico: @ViewData["Link1"]</div>
+                if(iterador == idmodulos-1)
+                {
+                    <div class="subtitle">Examen final: @ViewData["Link2"]</div>
                 }
             }
+        </div>
             
-        }
+
+            <div class="accordion-item disabled" style="margin: 1%;">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button disabled class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    @modulo[@iterador].nombre #@modulo[@iterador].moduloID                            
+                </button>
+                <div class="titlemod">@modulo[@iterador].nombre</div>
+                </h2>
+                <div class="form-group my-2">
+                    <div class="desc">Descripcion modulo:  @modulo[@iterador].descripcion</div>
+                    <button class="btn btn-primary mx-3" onclick="actualizarNotas(@idModulo, 2)">Ver módulo</button>
+                            
+                </div>                            
+                        
+                <div class="desc" id="@RuteVideo">
+                    <!-- Aquí se mostrará la tabla de módulos -->
+                </div>
+                <div class="desc" id="@RutePdf">
+                    <!-- Aquí se mostrará la tabla de módulos -->
+                </div>
+                <button class="btn btn-primary mx-3" onclick="mostrarSiguienteModulo(@iterador, @idcurso, @idmodulos)">Siguiente</button>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                <div class="accordion-body">
+                            
+                </div>
+                </div>
+            </div>
+            
+        
     }
     
 </div>
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        var xxx = @counter;
         var valor = sessionStorage.getItem('UserRole');
         console.log("UserRole:"+valor);
         if(valor == 2){
@@ -151,6 +171,18 @@
                 alert('No hay contenido en este modulo',error);
             });
         }
+        var counter = @counter; // Inicializa el contador desde el valor de la variable Razor
+
+        function mostrarSiguienteModulo(iteradore, idcurso, largo) {
+            if(iteradore == largo-1){
+                alert("No hay mas modulos");
+                return;
+            }
+            console.log("iterador:"+iteradore, "idcurso:"+idcurso, "largo:"+largo);
+            var suma = iteradore + 1;
+            window.location.href = "http://localhost:5053/Student/Curso/"+idcurso+"?iterador="+suma;
+        }
+        
     </script>
     }
 </body>

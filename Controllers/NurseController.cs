@@ -35,6 +35,11 @@ public class NurseController : Controller
         return View();
     }
 
+    public IActionResult RegistroUser()
+    {
+        return View();
+    }
+
     public IActionResult Calificaciones()
     {
         return View();

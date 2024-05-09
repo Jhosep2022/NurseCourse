@@ -12,4 +12,10 @@ namespace NurseCourse.Models.DTOs
         public ICollection<ProgresoDto> Progresos { get; set; } = new List<ProgresoDto>();
         public ICollection<NotaExamenDto> NotasExamenes { get; set; } = new List<NotaExamenDto>();
     }
+
+    public class UpdateUserRoleDto
+    {
+        public int UsuarioId { get; set; }
+        public int NuevoRolId { get; set; }
+    }
 }

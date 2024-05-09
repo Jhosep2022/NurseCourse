@@ -62,22 +62,79 @@
         Tu navegador no soporta la reproducción de vídeo.
     </video>
 @foreach (var curso in Model){
+    var idcurso = curso.cursoId;
     <div class="card m-1" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">@curso.titulo</h5>
             <p class="card-text">@curso.descripcion.</p>
-            <a href="@Url.Action("Curso", "Student", new { id = curso.cursoId })"><button type="button" class="btn btn-primary">Ver modulos</button></a>
+            <a href="@Url.Action("Curso", "Student", new { id = curso.cursoId, iterador = 0 })"><button type="button" class="btn btn-primary">Ver modulos</button></a>
         </div>
     </div>
 }
 <script>
     var valor = sessionStorage.getItem('UserRole');
-      console.log("UserRole:"+valor);
-      if(valor == 2){
+    var idusersession = sessionStorage.getItem('UserID');
+    
+    console.log("UserRole:"+valor);
+    if(valor == 2){
         console.log("eres admin, fuera de aqui");
         window.location.href = "http://localhost:5053/Nurse/Index";
     }
-    
+        function mostrarmodulos(idcurso) {
+            console.log(idcurso+"mostrando modulos"+idusersession);
+
+            fetch('http://localhost:5053/api/Modulos/Curso/'+idcurso, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data['$values'][0].moduloID);
+                var idmodulo = data['$values'][0].moduloID;
+                postProgreso(idmodulo, idcurso);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al obtener el curso'+idusersession);
+            });
+        }
+        function postProgreso(idmodulo, idcurso) {
+            console.log(idmodulo+"hola:"+idcurso);
+            var plan = {
+                progresoId: 54,
+                moduloActual: idmodulo,
+                completo: false,
+                contenidoId: 12,
+                usuarioId: idusersession,
+                cursoId: idcurso,
+            };
+
+            fetch('http://localhost:5053/api/progreso/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(plan)
+            })            
+            .then(response => {
+                console.log('Error:', response);
+                if (!response.ok) {
+                    
+                    throw new Error('Network response was not ok');
+                    
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Success2:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al mostrar progreso el curso'+error);
+            });
+        }
 </script>
 </body>
 </html>

@@ -42,9 +42,9 @@ public class StudentController : Controller
         return View(cursos);
     }
 
-    public async Task<IActionResult> Curso(int? id)
+    public async Task<IActionResult> Curso(int? id, int? iterador)
     {
-        if (id == null)
+        if (id == null || iterador == null)
         {
             return NotFound();
         }
@@ -66,7 +66,7 @@ public class StudentController : Controller
         List<gProgreso> permitidos = new List<gProgreso>();
         using (var httpClient = new HttpClient())
         {
-            using (var response = await httpClient.GetAsync("http://localhost:5053/api/progreso/usuario/2"))
+            using (var response = await httpClient.GetAsync("http://localhost:5053/api/progreso/usuario/"+id))
             {
                 if(response.IsSuccessStatusCode)
                 {
@@ -77,7 +77,30 @@ public class StudentController : Controller
                 }
             }
         }
-        var model = Tuple.Create(modulos, permitidos);
+        List<gExamenes> examenes = new List<gExamenes>();
+        using (var httpClient = new HttpClient())
+        {
+            using (var response = await httpClient.GetAsync("http://localhost:5053/api/Examenes/Curso/"+id))
+            {
+                if(response.IsSuccessStatusCode)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    examenes = JsonConvert.DeserializeObject<List<gExamenes>>(apiResponse);
+                }else{
+                    examenes = null;
+                }
+            }
+        }
+        ViewData["id"] = id;
+        ViewData["iterador"] = iterador;
+        ViewData["Link1"] = examenes[0].linkExame;
+        ViewData["Link2"] = examenes[1].linkExame;
+        var listaIds = new List<int>();
+        for(int i = 0; i < modulos.Count; i++)
+        {
+            listaIds.Add(modulos[i].moduloID);
+        }
+        var model = Tuple.Create(modulos, listaIds);
         return View(model);
     }
 }

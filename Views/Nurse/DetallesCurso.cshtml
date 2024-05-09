@@ -83,8 +83,12 @@
         <tr>
             <th>Nombre</th>
             <th>Email</th>
+            <th>Rol sistema</th>
+            <th>Nuevo Rol</th>
             <th>Nota actual</th>
             <th>Actualizar nota</th>
+            <th>Eliminar user</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -98,10 +102,26 @@
         {
             var idnew = (int)(@ViewData["id"] ?? 0);
             var idUser = @modulo.usuarioId;
+            var direction = "Diagnostico"+idUser;
+            var rutarol = "moduloDropdown"+idUser;
 
             <tr class="animation">
                 <td>@modulo.nombre</td>
-                <td>@modulo.correoElectronico</td>                
+                <td>@modulo.correoElectronico</td>
+                <td>
+                    @if(@modulo.rolId == 1){
+                        <p>Usuario</p>
+                    }else{
+                        <p>Enfermera</p>
+                    }
+                </td>
+                <td>
+                    <select id="@rutarol" class="form-control mb-3">
+                        <option value="2">Administrador</option>
+                        <option value="1">Usuario</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" onclick="actualizarRol(@idnew, @idUser)">ModificarRol</button>
+                </td>                
                 <td>
                     @if(modulo.nombre != null){
                         var aux = 0; 
@@ -119,10 +139,13 @@
                 </td>
                 <td>
                     <div class="mb-3">
-                        <input type="number" class="form-control" id="Diagnostico" name="Diagnostico" required>
+                        <input type="number" class="form-control w-50" id="@direction" name="@direction" required>
                     </div>
+                
+                    <button type="button" class="btn btn-primary" onclick="actualizarNotas(@idnew, @idUser)">Actualizar</button>
                 </td>
-                <td><button type="button" class="btn btn-primary" onclick="actualizarNotas(@idnew, @idUser)">Actualizar</button></td>
+                <td><button type="button" class="btn btn-danger" onclick="eliminarUser(@idnew, @idUser)">Eliminar</button></td>
+                <td><button type="button" class="btn btn-primary">Certificar</button></td>
             </tr>
         }
     }
@@ -163,109 +186,98 @@
             console.log("eres user, fuera de aqui");
             window.location.href = "http://localhost:5053/Student/Index";
         }
-        function submitCurso() {
-            var curso = {
-                Descripcion: document.getElementById('Diagnostico').value
-            };
-
-            fetch('http://localhost:5053/api/Cursos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(curso)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                submitExamenFinal(data.cursoId);
-                submitDiagnostico(data.cursoId);
-                alert('curso registrado con éxito!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error al registrar el curso');
-            });
-        }
-        function submitExamenFinal(id) {
-            var examenfinal = {
-                Titulo: "Examen Final",
-                CursoId: id,
-                LinkExame: document.getElementById('Final').value
-            };
-
-            fetch('http://localhost:5053/api/Examenes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(examenfinal)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('examenfinal registrado con éxito!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error al registrar el examenfinal');
-            });
-        }
-        function submitDiagnostico(id) {
-            var examendiagno = {
-                Titulo: "Diagnostico",
-                CursoId: id,
-                LinkExame: document.getElementById('Diagnostico').value
-            };
-
-            fetch('http://localhost:5053/api/Examenes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(examendiagno)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                alert('examendiagno registrado con éxito!');
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error al registrar el examendiagno');
-            });
-        }
-            function actualizarNotas(holax, iduser) {
+        function actualizarRol(holax, iduser) {
                 
-                console.log(iduser+"hola:"+holax);
-                 // Crear objeto de solicitud
-                var xhr = new XMLHttpRequest();
+            console.log(iduser+"hola:"+holax);
+             // Crear objeto de solicitud
+            var xhr = new XMLHttpRequest();
 
-                // Configurar la solicitud
-                xhr.open("POST", "http://localhost:5053/api/NotaExamenes", true);
-                xhr.setRequestHeader("Content-Type", "application/json");
+            // Configurar la solicitud
+            xhr.open("PUT", "http://localhost:5053/api/usuarios/update-role", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
 
-                // Definir el cuerpo de la solicitud
-                var body = JSON.stringify({
-                    "UsuarioId": iduser,
-                    "ExamenId": holax,
-                    "Calificacion": document.getElementById('Diagnostico').value
-                });
+            // Definir el cuerpo de la solicitud
+            var body = JSON.stringify({
+                "UsuarioId": iduser,
+                "NuevoRolId": document.getElementById('moduloDropdown'+iduser).value
+            });
 
-                // Manejar la respuesta de la solicitud
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                    console.log("Notas actualizadas exitosamente.");
-                    window.location.href ="http://localhost:5053/Nurse/DetallesCurso/"+holax
-                    } else {
-                    console.error("Error al actualizar las notas. Código de estado: " + xhr.status);
-                    window.location.href = "http://localhost:5053/Nurse/DetallesCurso/"+holax
-                    }
-                };
+            // Manejar la respuesta de la solicitud
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                console.log("Rol actualizadas exitosamente.");
+                window.location.href ="http://localhost:5053/Nurse/DetallesCurso/"+holax
+                } else {
+                console.error("Error al actualizar las Rol. Código de estado: " + xhr.status + " " + holax);
+                window.location.href = "http://localhost:5053/Nurse/DetallesCurso/"+holax
+                }
+            };
 
-                // Enviar la solicitud
-                xhr.send(body);
-            }
+            // Enviar la solicitud
+            xhr.send(body);
+        }
+
+        function actualizarNotas(holax, iduser) {                
+            console.log(iduser+"hola:"+holax);
+            // Crear objeto de solicitud
+            var xhr = new XMLHttpRequest();
+
+            // Configurar la solicitud
+            xhr.open("POST", "http://localhost:5053/api/NotaExamenes", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // Definir el cuerpo de la solicitud
+            var body = JSON.stringify({
+                "UsuarioId": iduser,
+                "ExamenId": holax,
+                "Calificacion": document.getElementById('Diagnostico'+iduser).value
+            });
+
+            // Manejar la respuesta de la solicitud
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                console.log("Notas actualizadas exitosamente.");
+                window.location.href ="http://localhost:5053/Nurse/DetallesCurso/"+holax
+                } else {
+                console.error("Error al actualizar las notas. Código de estado: " + xhr.status + " " + holax);
+                window.location.href = "http://localhost:5053/Nurse/DetallesCurso/"+holax
+                }
+            };
+
+            // Enviar la solicitud
+            xhr.send(body);
+        }
+
+        function eliminarUser(holax, iduser) {                
+            console.log(iduser+"hola:"+holax);
+            // Crear objeto de solicitud
+            var xhr = new XMLHttpRequest();
+
+            // Configurar la solicitud
+            xhr.open("DELETE", "http://localhost:5053/api/usuarios/"+iduser, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            // Definir el cuerpo de la solicitud
+            var body = JSON.stringify({
+                "UsuarioId": iduser,
+                "ExamenId": holax,
+                "Calificacion": document.getElementById('Diagnostico'+iduser).value
+            });
+
+            // Manejar la respuesta de la solicitud
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                console.log("Eliminado exitosamente.");
+                window.location.href ="http://localhost:5053/Nurse/DetallesCurso/"+holax
+                } else {
+                console.error("Eliminar las notas. Código de estado: " + xhr.status + " " + holax);
+                window.location.href = "http://localhost:5053/Nurse/DetallesCurso/"+holax
+                }
+            };
+
+            // Enviar la solicitud
+            xhr.send(body);
+        }
     </script>
 </body>
 </html>

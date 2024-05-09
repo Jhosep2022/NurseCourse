@@ -40,13 +40,12 @@ public class UsuariosController : ControllerBase
         _context.Usuarios.Add(usuario);
         await _context.SaveChangesAsync();
 
-        // Crear automáticamente el progreso inicial para el nuevo usuario
-        var contenidoInicial = await _context.Contenidos.FirstOrDefaultAsync(); // Obtener el contenido inicial
+        var contenidoInicial = await _context.Contenidos.FirstOrDefaultAsync();
         if (contenidoInicial != null)
         {
             var progreso = new Progreso
             {
-                ModuloActual = 1, // O el módulo inicial correspondiente
+                ModuloActual = 1,
                 Completo = false,
                 ContenidoId = contenidoInicial.ContenidoId,
                 UsuarioId = usuario.UsuarioId
@@ -63,14 +62,13 @@ public class UsuariosController : ControllerBase
     public async Task<ActionResult<Usuario>> Login(LoginDTO loginDto)
     {
         var usuario = await _context.Usuarios
-                                    .FirstOrDefaultAsync(u => u.CorreoElectronico == loginDto.UserName && u.Contraseña == loginDto.Password); // Considere mejorar la seguridad aquí
+                                    .FirstOrDefaultAsync(u => u.CorreoElectronico == loginDto.UserName && u.Contraseña == loginDto.Password);
         
         if (usuario == null)
         {
             return Unauthorized("Credenciales inválidas");
         }
 
-        // Aquí podrías generar un token si estás usando JWT o simplemente retornar un resultado positivo
         return Ok(usuario);
     }
 
@@ -79,6 +77,8 @@ public class UsuariosController : ControllerBase
     {
         var usuario = await _context.Usuarios
             .Include(u => u.Progresos)
+                .ThenInclude(p => p.Contenido)
+                    .ThenInclude(c => c.Modulo)
             .Include(u => u.NotasExamenes)
                 .ThenInclude(ne => ne.Examen)
             .FirstOrDefaultAsync(u => u.UsuarioId == id);
@@ -88,7 +88,6 @@ public class UsuariosController : ControllerBase
             return NotFound("Usuario no encontrado.");
         }
 
-        // Asumimos que hay una propiedad CursoId en el modelo Examen
         var usuarioDto = new UsuarioDto
         {
             UsuarioId = usuario.UsuarioId,
@@ -100,14 +99,19 @@ public class UsuariosController : ControllerBase
             RolId = usuario.RolId,
             Progresos = usuario.Progresos.Select(p => new ProgresoDto
             {
-                // Mapear propiedades de ProgresoDto
+                ProgresoId = p.ProgresoId,
+                ModuloActual = p.ModuloActual,
+                Completo = p.Completo,
+                ContenidoId = p.ContenidoId,
+                UsuarioId = p.UsuarioId,
+                CursoId = p.Contenido.Modulo.CursoId
             }).ToList(),
             NotasExamenes = usuario.NotasExamenes.Select(ne => new NotaExamenDto
             {
                 NotaExamenId = ne.NotaExamenId,
                 UsuarioId = ne.UsuarioId,
                 ExamenId = ne.ExamenId,
-                CursoId = ne.Examen.CursoId, // Accedemos a CursoId desde Examen
+                CursoId = ne.Examen.CursoId,
                 Calificacion = ne.Calificacion
             }).ToList()
         };
@@ -115,12 +119,13 @@ public class UsuariosController : ControllerBase
         return Ok(usuarioDto);
     }
 
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetAllUsuarios()
     {
         var usuarios = await _context.Usuarios
             .Include(u => u.Progresos)
+                .ThenInclude(p => p.Contenido)
+                    .ThenInclude(c => c.Modulo)
             .Include(u => u.NotasExamenes)
                 .ThenInclude(ne => ne.Examen)
             .ToListAsync();
@@ -136,18 +141,90 @@ public class UsuariosController : ControllerBase
             RolId = u.RolId,
             Progresos = u.Progresos.Select(p => new ProgresoDto
             {
-                // Mapear propiedades de ProgresoDto
+                ProgresoId = p.ProgresoId,
+                ModuloActual = p.ModuloActual,
+                Completo = p.Completo,
+                ContenidoId = p.ContenidoId,
+                UsuarioId = p.UsuarioId,
+                CursoId = p.Contenido.Modulo.CursoId
             }).ToList(),
             NotasExamenes = u.NotasExamenes.Select(ne => new NotaExamenDto
             {
                 NotaExamenId = ne.NotaExamenId,
                 UsuarioId = ne.UsuarioId,
                 ExamenId = ne.ExamenId,
-                CursoId = ne.Examen.CursoId, // Accedemos a CursoId desde Examen
+                CursoId = ne.Examen.CursoId,
                 Calificacion = ne.Calificacion
             }).ToList()
         }).ToList();
 
         return Ok(usuariosDto);
+    }
+
+    [HttpPut("update-role")]
+    public async Task<IActionResult> PutUpdateUserRole(UpdateUserRoleDto updateRoleDto)
+    {
+        var usuario = await _context.Usuarios.FindAsync(updateRoleDto.UsuarioId);
+
+        if (usuario == null)
+        {
+            return NotFound("Usuario no encontrado.");
+        }
+
+        var rolExistente = await _context.Roles.FindAsync(updateRoleDto.NuevoRolId);
+
+        if (rolExistente == null)
+        {
+            return BadRequest("Rol especificado no existe.");
+        }
+
+        usuario.RolId = updateRoleDto.NuevoRolId;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!_context.Usuarios.Any(e => e.UsuarioId == updateRoleDto.UsuarioId))
+            {
+                return NotFound("Usuario no encontrado para actualizar.");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUsuario(int id)
+    {
+        var usuario = await _context.Usuarios
+            .Include(u => u.NotasExamenes)
+            .Include(u => u.Progresos)
+            .FirstOrDefaultAsync(u => u.UsuarioId == id);
+
+        if (usuario == null)
+        {
+            return NotFound("Usuario no encontrado.");
+        }
+
+        _context.NotasExamenes.RemoveRange(usuario.NotasExamenes);
+        _context.Progreso.RemoveRange(usuario.Progresos);
+        _context.Usuarios.Remove(usuario);
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException e)
+        {
+            return StatusCode(500, "No se puede eliminar el usuario porque tiene datos relacionados en otras tablas.");
+        }
+
+        return NoContent();
     }
 }
