@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\NurseCourse.csproj": {}
+    "D:\\UpWork\\NurseCourse\\NurseCourse.csproj": {}
   },
   "projects": {
-    "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\NurseCourse.csproj": {
+    "D:\\UpWork\\NurseCourse\\NurseCourse.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\NurseCourse.csproj",
+        "projectUniqueName": "D:\\UpWork\\NurseCourse\\NurseCourse.csproj",
         "projectName": "NurseCourse",
-        "projectPath": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\NurseCourse.csproj",
-        "packagesPath": "C:\\Users\\elbet\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\elbet\\Desktop\\proyectos\\NurseJose2\\NurseCourse\\obj\\",
+        "projectPath": "D:\\UpWork\\NurseCourse\\NurseCourse.csproj",
+        "packagesPath": "C:\\Users\\JOSE\\.nuget\\packages\\",
+        "outputPath": "D:\\UpWork\\NurseCourse\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\elbet\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\JOSE\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"

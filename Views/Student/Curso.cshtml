@@ -86,17 +86,16 @@
         var RuteVideo = "tablaModulos"+modulo[@counter].moduloID;
         var RutePdf = "tablaModulospdf"+modulo[@counter].moduloID;
         <div class="horizontal">
-            @if(@ViewData["Link1"] == null || @ViewData["Link2"] == null){
-                <p>No hay links</p>
-            }else{
-                <div class="subtitle">Diagnostico: @ViewData["Link1"]</div>
-                if(iterador == idmodulos-1)
-                {
-                    <div class="subtitle">Examen final: @ViewData["Link2"]</div>
+                @if(ViewData["Link1"] == null || ViewData["Link2"] == null){
+                    <p>No hay links</p>
+                }else{
+                    <button type="button" class="btn btn-primary subtitle" onclick="window.location.href='@ViewData["Link1"]'">Diagnóstico</button>
+                    if(iterador == idmodulos-1)
+                    {
+                        <button type="button" class="btn btn-primary subtitle" onclick="window.location.href='@ViewData["Link2"]'">Examen final</button>
+                    }
                 }
-            }
-        </div>
-            
+            </div>
 
             <div class="accordion-item disabled" style="margin: 1%;">
                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
