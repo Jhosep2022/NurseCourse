@@ -16,7 +16,7 @@
         }
         .animation:hover {
           transform: translateY(-3px);
-          border-bottom: 3px solid ;
+          border-bottom: 3px solid;
           background-color: #dbdbdb;
           transition: transform 0.2s;
         }
@@ -55,7 +55,6 @@
 <div class="titlenurse">
     <h1 class="">Lista de usuarios</h1>
     <div class="imgsection"><img src="https://cdn-icons-png.flaticon.com/512/33/33308.png" alt="Curso" style="width: 100px; height: 100px;"></div>
-    
 </div>
 
 <table class="table">
@@ -64,6 +63,7 @@
             <th>Nombre</th>
             <th>Email</th>
             <th>Cargo</th>
+            <th>Teléfono</th> <!-- Nueva columna para teléfono -->
         </tr>
     </thead>
     <tbody>
@@ -73,6 +73,7 @@
             <td>@users.nombre</td>
             <td>@users.correoElectronico</td>
             <td>@users.cargo</td>
+            <td>@users.telefono</td> <!-- Agrega el dato de teléfono aquí -->
         </tr>
     }
     </tbody>

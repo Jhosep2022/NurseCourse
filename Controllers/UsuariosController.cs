@@ -31,10 +31,11 @@ public class UsuariosController : ControllerBase
         {
             Nombre = registroDto.Nombre,
             CorreoElectronico = registroDto.CorreoElectronico,
-            Contraseña = registroDto.Contraseña, 
+            Contraseña = registroDto.Contraseña,
             Edad = registroDto.Edad,
             Cargo = registroDto.Cargo,
-            RolId = registroDto.RolId
+            RolId = registroDto.RolId,
+            Telefono = registroDto.Telefono  // Asignando el teléfono
         };
 
         _context.Usuarios.Add(usuario);
@@ -97,6 +98,7 @@ public class UsuariosController : ControllerBase
             Edad = usuario.Edad,
             Cargo = usuario.Cargo,
             RolId = usuario.RolId,
+            Telefono = usuario.Telefono,  // Asegúrate de incluir el teléfono aquí
             Progresos = usuario.Progresos.Select(p => new ProgresoDto
             {
                 ProgresoId = p.ProgresoId,
@@ -139,6 +141,7 @@ public class UsuariosController : ControllerBase
             Edad = u.Edad,
             Cargo = u.Cargo,
             RolId = u.RolId,
+            Telefono = u.Telefono,  // Incluye el teléfono aquí también
             Progresos = u.Progresos.Select(p => new ProgresoDto
             {
                 ProgresoId = p.ProgresoId,
@@ -160,6 +163,7 @@ public class UsuariosController : ControllerBase
 
         return Ok(usuariosDto);
     }
+
 
     [HttpPut("update-role")]
     public async Task<IActionResult> PutUpdateUserRole(UpdateUserRoleDto updateRoleDto)

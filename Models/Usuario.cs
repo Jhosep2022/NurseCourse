@@ -9,8 +9,8 @@ public partial class Usuario
     public int Edad { get; set; }
     public string Cargo { get; set; } = null!;
     public int RolId { get; set; }
+    public string Telefono { get; set; } = null!;  // Nuevo campo Telefono
     public virtual ICollection<Progreso> Progresos { get; set; } = new List<Progreso>();
-    public virtual ICollection<NotaExamen> NotasExamenes { get; set; } = new List<NotaExamen>(); // New collection
+    public virtual ICollection<NotaExamen> NotasExamenes { get; set; } = new List<NotaExamen>();
     public virtual Role Rol { get; set; } = null!;
 }
-

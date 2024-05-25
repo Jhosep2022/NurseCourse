@@ -9,7 +9,7 @@ public partial class gUsuario
     public int edad { get; set; }
     public string cargo { get; set; } = null!;
     public int rolId { get; set; }
+    public string telefono { get; set; } = null!;  // Nuevo campo telefono
     public virtual ICollection<Progreso> progresos { get; set; } = new List<Progreso>();
-    public virtual ICollection<gNotaExamen> notasExamenes { get; set; } = new List<gNotaExamen>(); // New collection
+    public virtual ICollection<gNotaExamen> notasExamenes { get; set; } = new List<gNotaExamen>();
 }
-

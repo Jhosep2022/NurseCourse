@@ -29,7 +29,7 @@
 <body>
     <div class="container">
         <h2>Registrate</h2>
-        <p>Verifica que la información ingresada sea correcta, se usará para la certificacióon final.</p>
+        <p>Verifica que la información ingresada sea correcta, se usará para la certificación final.</p>
         <form id="userForm">
             <div class="mb-3">
                 <label for="Nombre" class="form-label">Nombre</label>
@@ -51,10 +51,12 @@
                 <label for="Cargo" class="form-label">Cargo</label>
                 <input type="text" class="form-control" id="Cargo" name="Cargo" required>
             </div>
+            <div class="mb-3">
+                <label for="Telefono" class="form-label">Teléfono</label>
+                <input type="tel" class="form-control" id="Telefono" name="Telefono" required>
+            </div>
             <button type="button" class="btn btn-primary" onclick="registrarUsuario()">Registrar</button>
         </form>
-        
-        
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -66,7 +68,8 @@
                 Contraseña: document.getElementById('Contraseña').value,
                 Edad: parseInt(document.getElementById('Edad').value),
                 Cargo: document.getElementById('Cargo').value,
-                RolId: 1
+                Telefono: document.getElementById('Telefono').value,  // Incluyendo el teléfono
+                RolId: 1  // Asumiendo un RolId predeterminado
             };
 
             fetch('http://localhost:5053/api/Usuarios/register', {

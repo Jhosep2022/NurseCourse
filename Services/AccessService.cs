@@ -33,6 +33,7 @@ namespace NurseCourse.Services
                 Edad = registroDto.Edad,
                 Cargo = registroDto.Cargo,
                 RolId = registroDto.RolId
+                
             };
 
             _context.Usuarios.Add(usuario);

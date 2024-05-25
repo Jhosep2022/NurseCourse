@@ -9,6 +9,7 @@ namespace NurseCourse.Models.DTOs
         public int Edad { get; set; }
         public string Cargo { get; set; }
         public int RolId { get; set; }
+        public string Telefono { get; set; }  // Nuevo campo Telefono
         public ICollection<ProgresoDto> Progresos { get; set; } = new List<ProgresoDto>();
         public ICollection<NotaExamenDto> NotasExamenes { get; set; } = new List<NotaExamenDto>();
     }

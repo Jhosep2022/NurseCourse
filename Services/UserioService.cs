@@ -21,6 +21,7 @@ namespace NurseCourse.Services
                 .Include(u => u.Cargo)
                 .Include(u => u.Nombre)
                 .Include(u => u.Rol)
+                .Include(u => u.Telefono)
                 .FirstOrDefaultAsync(u => u.UsuarioId == id);
 
             return usuario;
